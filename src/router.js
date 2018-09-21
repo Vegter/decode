@@ -23,16 +23,16 @@ export default new Router({
         import(/* webpackChunkName: "about" */ "./views/About.vue")
     },
     {
-        path: "/showQR",
-        name: "showQR",
-        component: () =>
-            import(/* webpackChunkName: "showQR" */ "./views/showQR.vue")
+      path: "/showQR",
+      name: "showQR",
+      component: () =>
+        import(/* webpackChunkName: "showQR" */ "./views/showQR.vue")
     },
     {
-        path: "/readQR",
-        name: "readQR",
-        component: () =>
-            import(/* webpackChunkName: "readQR" */ "./views/readQR.vue")
+      path: "/readQR",
+      name: "readQR",
+      component: () =>
+        import(/* webpackChunkName: "readQR" */ "./views/readQR.vue")
     }
   ]
 });
