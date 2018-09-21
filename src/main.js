@@ -9,7 +9,11 @@ import VueQrcodeReader from "vue-qrcode-reader";
 
 Vue.config.productionTip = false;
 
-Vue.use(Buefy);
+Vue.use(Buefy, {
+  defaultIconPack: "fas",
+  defaultContainerElement: "#content"
+});
+
 Vue.use(VueQrcodeReader);
 
 new Vue({
