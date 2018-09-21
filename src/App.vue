@@ -26,7 +26,9 @@
         </div>
 
         <div class="navbar-end">
-          <!-- navbar items -->
+            <a class="navbar-item">
+                <router-link to="/showQR">Show QR</router-link>
+            </a>
         </div>
       </div>
     </nav>
