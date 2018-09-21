@@ -29,6 +29,9 @@
             <a class="navbar-item">
                 <router-link to="/showQR">Show QR</router-link>
             </a>
+            <a class="navbar-item">
+                <router-link to="/readQR">Read QR</router-link>
+            </a>
         </div>
       </div>
     </nav>

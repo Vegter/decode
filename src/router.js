@@ -27,6 +27,12 @@ export default new Router({
         name: "showQR",
         component: () =>
             import(/* webpackChunkName: "showQR" */ "./views/showQR.vue")
+    },
+    {
+        path: "/readQR",
+        name: "readQR",
+        component: () =>
+            import(/* webpackChunkName: "readQR" */ "./views/readQR.vue")
     }
   ]
 });

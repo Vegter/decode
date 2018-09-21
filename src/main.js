@@ -5,10 +5,12 @@ import store from "./store";
 import "./registerServiceWorker";
 
 import Buefy from "buefy";
+import VueQrcodeReader from "vue-qrcode-reader";
 
 Vue.config.productionTip = false;
 
 Vue.use(Buefy);
+Vue.use(VueQrcodeReader);
 
 new Vue({
   router,

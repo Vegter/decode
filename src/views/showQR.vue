@@ -9,14 +9,14 @@
 import QrcodeVue from "qrcode.vue";
 
 export default {
-    data() {
-        return {
-            value: "https://example.com",
-            size: 300
-        }
-    },
-    components: {
-        QrcodeVue
-    }
-}
+  data() {
+    return {
+      value: "https://example.com",
+      size: 300
+    };
+  },
+  components: {
+    QrcodeVue
+  }
+};
 </script>
