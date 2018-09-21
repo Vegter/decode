@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["readQR"],{dfc5:function(e,n,o){"use strict";o.r(n);var c=function(){var e=this,n=e.$createElement,o=e._self._c||n;return o("div",[o("h1",[e._v("ReadQR")]),o("qrcode-reader",{on:{decode:e.onDecode}})],1)},d=[],r=o("9a3e"),t={data:function(){return{}},components:{QrcodeReader:r["QrcodeReader"]},methods:{onDecode:function(e){alert("onDecode: ".concat(e))}}},a=t,u=o("2877"),i=Object(u["a"])(a,c,d,!1,null,null,null);i.options.__file="readQR.vue";n["default"]=i.exports}}]);
-//# sourceMappingURL=readQR.71f98423.js.map
