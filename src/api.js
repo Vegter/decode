@@ -1,7 +1,30 @@
-const DECODE_SERVER = "http://127.0.0.1:5000/";
+const DECODE_SERVER = "http://185.54.115.75:5000/";
 
 export async function get_data(path) {
   var url = DECODE_SERVER + path;
   var result = await fetch(url);
   return result;
+}
+
+export async function getSession() {
+  const url = DECODE_SERVER + "init_disclosure";
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      attribute_request: "ouderdan18",
+      description: "Are you older than 18?"
+    })
+  });
+  return response.json();
+}
+
+export async function getRequest(sessionId) {
+  const url = DECODE_SERVER + "get_session";
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      session_id: sessionId
+    })
+  });
+  return response.json();
 }

@@ -10,7 +10,9 @@ import { QrcodeReader } from "vue-qrcode-reader";
 
 export default {
   data() {
-    return {};
+    return {
+      session: null
+    };
   },
   components: {
     QrcodeReader

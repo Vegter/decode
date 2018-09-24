@@ -43,7 +43,7 @@
 
 <script>
 export default {
-  name: "Decode App",
+  name: "Decode",
   data() {
     return {};
   },

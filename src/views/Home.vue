@@ -6,8 +6,9 @@
           DECODE
         </h1>
         <h2 class="subtitle">
-          Digital Identity, {{msg}}
+          Digital Identity
         </h2>
+          <p>Session: {{session.sesssion_id}}</p>
       </div>
     </div>
   </section>
@@ -16,26 +17,20 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
-import { get_data } from "@/api";
+import { mapGetters } from "vuex";
 
 export default {
   name: "home",
   data() {
-    return {
-      msg: ""
-    };
+    return {};
+  },
+  computed: {
+    ...mapGetters(["session"])
   },
   components: {
     HelloWorld
   },
-  methods: {
-    async getData() {
-      var response = await get_data("");
-      this.msg = await response.text();
-    }
-  },
-  async mounted() {
-    await this.getData();
-  }
+  methods: {},
+  mounted() {}
 };
 </script>
