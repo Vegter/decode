@@ -7,7 +7,8 @@
           <img src="./assets/decode-logo.png">
         </a>
 
-        <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <a role="button" class="navbar-burger" id="navBurger" data-target="navMenu"
+           aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -39,6 +40,23 @@
     <router-view/>
   </div>
 </template>
+
+<script>
+export default {
+  name: "Decode App",
+  data() {
+    return {};
+  },
+  components: {},
+  methods: {},
+  watch: {
+    $route() {
+      document.getElementById("navMenu").classList.remove("is-active");
+      document.getElementById("navBurger").classList.remove("is-active");
+    }
+  }
+};
+</script>
 
 <style lang="scss">
 @import "~bulma/sass/utilities/_all";
