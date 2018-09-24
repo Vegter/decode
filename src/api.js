@@ -12,7 +12,18 @@ export async function getSession() {
     method: "POST",
     body: JSON.stringify({
       attribute_request: "ouderdan18",
-      description: "Are you older than 18?"
+      description: "Ben je 18 jaar of ouder?"
+    })
+  });
+  return response.json();
+}
+
+export async function getSessionStatus(sessionId) {
+  const url = DECODE_SERVER + "get_session_status";
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      session_id: sessionId
     })
   });
   return response.json();
