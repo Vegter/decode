@@ -1,25 +1,32 @@
 <template>
     <div>
-        <section class="section" v-show="session.session_id">
+
+        <section class="section" v-if="request.response === 'STARTED'">
+            <div class="container">
+                <h1 class="title">Wacht op antwoord...</h1>
+            </div>
+        </section>
+
+        <section class="section" v-else-if="request.response === 'FINALIZED'">
+            <div class="container">
+                <h1 class="title">Antwoord</h1>
+            </div>
+        </section>
+
+        <section class="section" v-else>
             <div class="container">
                 <h1 class="title">Ben je 18 jaar of ouder?</h1>
-                <div v-if="request.status === 'STARTED'">
-                    Wacht op antwoord...
-                </div>
-                <div v-else-if="request.status === 'FINALIZED'">
-                    Finalized...
-                </div>
-                <div v-else>
                 <h2 class="subtitle">
                     Scan onderstaande code om deze vraag te beantwoorden
                 </h2>
                 <div>
                     <qrcode-vue :value="session.session_id" :size="size" level="H"></qrcode-vue>
                 </div>
-                </div>
             </div>
         </section>
-        <p>{{request}}</p>
+
+        <pre>{{session}}</pre>
+        <pre>{{request}}</pre>
     </div>
 </template>
 
@@ -27,7 +34,7 @@
 import QrcodeVue from "qrcode.vue";
 
 import { mapActions } from "vuex";
-import { getSession, getSessionStatus } from "../api";
+import { getSession, getSessionStatus, getFullSession } from "../api";
 
 var status_requestor = null;
 
@@ -52,6 +59,12 @@ export default {
 
       status_requestor = setInterval(async () => {
         this.request = await getSessionStatus(this.session.session_id);
+        if (this.request.response === 'FINALIZED') {
+          clearInterval(status_requestor);
+          this.session = await getFullSession(this.session.session_id);
+          this.setSession(this.session);
+        }
+        // request.response contains status
       }, 1000);
     }
   },

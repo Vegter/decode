@@ -18,6 +18,17 @@ export async function getSession() {
   return response.json();
 }
 
+export async function getFullSession(sessionId) {
+  const url = DECODE_SERVER + "get_session";
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      session_id: sessionId
+    })
+  });
+  return response.json();
+}
+
 export async function getSessionStatus(sessionId) {
   const url = DECODE_SERVER + "get_session_status";
   const response = await fetch(url, {
@@ -39,3 +50,27 @@ export async function getRequest(sessionId) {
   });
   return response.json();
 }
+
+export async function acceptRequest(sessionId) {
+  const url = DECODE_SERVER + "accept_request";
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      session_id: sessionId,
+      username: "p.pietersen"
+    })
+  });
+  return response.json();
+}
+
+export async function denyRequest(sessionId) {
+  const url = DECODE_SERVER + "deny_request";
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      session_id: sessionId
+    })
+  });
+  return response.json();
+}
+

@@ -8,7 +8,6 @@
         <h2 class="subtitle">
           Digital Identity
         </h2>
-          <p>Session: {{session.sesssion_id}}</p>
       </div>
     </div>
   </section>
@@ -16,7 +15,6 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -27,9 +25,7 @@ export default {
   computed: {
     ...mapGetters(["session"])
   },
-  components: {
-    HelloWorld
-  },
+  components: {},
   methods: {},
   mounted() {}
 };
