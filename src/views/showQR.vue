@@ -4,7 +4,8 @@
             <div class="container">
                 <h1 class="title">Wacht op antwoord...</h1>
                 <h2 class="subtitle has-text-centered">
-                    <i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>
+                    <img src="../assets/animated-logo.gif" width="100">
+                    <!--<i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>-->
                 </h2>
             </div>
         </section>
@@ -36,6 +37,9 @@
                         </p>
                     </div>
                 </div>
+                <p>
+                    <button class="button is-primary" @click="endRequest()">OK</button>
+                </p>
             </div>
         </section>
 
@@ -47,12 +51,13 @@
                 </h2>
                 <div>
                     <qrcode-vue :value="session.session_id" :size="size" level="H"></qrcode-vue>
+                    <div>{{session.session_id}}</div>
                 </div>
             </div>
         </section>
 
-        <pre>{{session}}</pre>
-        <pre>{{request}}</pre>
+        <!--<pre>{{session}}</pre>-->
+        <!--<pre>{{request}}</pre>-->
     </div>
 </template>
 
@@ -81,6 +86,9 @@ export default {
     ...mapActions({
       setSession: "setSession"
     }),
+    endRequest() {
+      this.$router.push("/showQR");
+    },
     async getSession() {
       this.session = await getSession(this.attribute, this.description);
       this.setSession(this.session);

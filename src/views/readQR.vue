@@ -38,8 +38,6 @@
                         <button class="button is-danger" @click="denyQuestion()">Weiger</button>
                     </div>
                 </div>
-                <pre>{{request}}</pre>
-                <pre>{{response}}</pre>
             </div>
         </section>
 
@@ -64,9 +62,11 @@
                         <button class="button is-link" @click="getRequest(sessionId)" :disabled="!inputSession">Get Request</button>
                     </p>
                 </div>
-                <pre>{{sessionId}}</pre>
             </div>
         </section>
+        <!--<pre>{{sessionId}}</pre>-->
+        <!--<pre>{{request}}</pre>-->
+        <!--<pre>{{response}}</pre>-->
     </div>
 </template>
 
@@ -111,9 +111,11 @@ export default {
     },
     async acceptQuestion() {
       this.response = await acceptRequest(this.request.id, this.username);
+      this.$router.push("/");
     },
     async denyQuestion() {
       this.response = await denyRequest(this.request.id);
+      this.$router.push("/");
     },
     async onInputSession() {
       // Manual session input
