@@ -56,15 +56,17 @@
             </div>
         </section>
 
-        <!--<pre>{{session}}</pre>-->
-        <!--<pre>{{request}}</pre>-->
+        <div v-if="debug">
+            <pre>{{session}}</pre>
+            <pre>{{request}}</pre>
+        </div>
     </div>
 </template>
 
 <script>
 import QrcodeVue from "qrcode.vue";
 
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { getSession, getSessionStatus, getFullSession } from "../api";
 
 var status_requestor = null;
@@ -79,6 +81,9 @@ export default {
       description: "Ben je 18 jaar of ouder?"
     };
   },
+  computed: {
+    ...mapGetters(["debug"])
+  },
   components: {
     QrcodeVue
   },
@@ -87,7 +92,7 @@ export default {
       setSession: "setSession"
     }),
     endRequest() {
-      this.$router.push("/showQR");
+      this.$router.push("/");
     },
     async getSession() {
       this.session = await getSession(this.attribute, this.description);
@@ -99,6 +104,11 @@ export default {
           clearInterval(status_requestor);
           this.session = await getFullSession(this.session.session_id);
           this.setSession(this.session);
+          setTimeout(() => {
+            if (!this.debug) {
+              this.endRequest();
+            }
+          }, 2500);
         }
         // request.response contains status
       }, 1000);

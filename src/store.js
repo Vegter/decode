@@ -6,7 +6,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     session: {},
-    username: null
+    username: null,
+    debug: false
   },
   mutations: {
     session(state, session) {
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     },
     username: state => {
       return state.username;
+    },
+    debug: state => {
+      return state.debug;
     }
   }
 });

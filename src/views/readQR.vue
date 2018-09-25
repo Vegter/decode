@@ -64,9 +64,12 @@
                 </div>
             </div>
         </section>
-        <!--<pre>{{sessionId}}</pre>-->
-        <!--<pre>{{request}}</pre>-->
-        <!--<pre>{{response}}</pre>-->
+
+        <div v-if="debug">
+            <pre>{{sessionId}}</pre>
+            <pre>{{request}}</pre>
+            <pre>{{response}}</pre>
+        </div>
     </div>
 </template>
 
@@ -88,7 +91,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["username"])
+    ...mapGetters(["username", "debug"])
   },
   components: {
     QrcodeReader
@@ -111,11 +114,18 @@ export default {
     },
     async acceptQuestion() {
       this.response = await acceptRequest(this.request.id, this.username);
-      this.$router.push("/");
+      this.endQuestion();
     },
     async denyQuestion() {
       this.response = await denyRequest(this.request.id);
-      this.$router.push("/");
+      this.endQuestion();
+    },
+    endQuestion() {
+      if (!this.debug) {
+        setTimeout(() => {
+          this.$router.push("/");
+        }, 1000);
+      }
     },
     async onInputSession() {
       // Manual session input
