@@ -3,7 +3,7 @@
     <div class="hero-body">
       <div class="container">
         <h1 class="title">
-          DECODE
+          DECODE!
         </h1>
         <h2 class="subtitle">
           Digital Identity
