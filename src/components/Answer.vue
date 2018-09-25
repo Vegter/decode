@@ -1,7 +1,7 @@
 <template>
     <div class="answer" :style="{'border-color':color}">
         <div v-if="pictureUrl && status === 'ACCEPTED' && valid" >
-            <img :src="pictureUrl" width="30%">
+            <img :src="pictureUrl" width="50%">
         </div>
         <div>
             <h1 class="title">Antwoord</h1>
