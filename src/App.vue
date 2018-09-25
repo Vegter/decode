@@ -54,6 +54,13 @@ export default {
       document.getElementById("navMenu").classList.remove("is-active");
       document.getElementById("navBurger").classList.remove("is-active");
     }
+  },
+  mounted() {
+    const sessionId = this.$route.query.session;
+    console.log("Session ID", sessionId);
+    if (sessionId) {
+      console.log('Session read');
+    }
   }
 };
 </script>

@@ -1,4 +1,5 @@
-const DECODE_SERVER = "http://185.54.115.75:5000/";
+// const DECODE_SERVER = "http://185.54.115.75:5000/";
+const DECODE_SERVER = "https://decode.stadswerken.amsterdam/";
 
 export async function get_data(path) {
   var url = DECODE_SERVER + path;
