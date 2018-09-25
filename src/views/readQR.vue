@@ -27,8 +27,8 @@
 
         <section class="section" v-else-if="request">
             <div class="container">
-                <h1 class="title">Beantwoord vraag</h1>
-                <div>
+                <div v-if="!response">
+                    <h1 class="title">Beantwoord vraag</h1>
                     <h2 class="subtitle">
                         {{request.description}}
                     </h2>
@@ -38,7 +38,22 @@
                         <button class="button is-danger" @click="denyQuestion()">Weiger</button>
                     </div>
                 </div>
-            </div>
+
+                <div v-else-if="response.response.data" class="has-text-centered">
+                    <answer :question="request.description"
+                            :status="response.response.data.request_status"
+                            :valid="response.response.data.request_valid"
+                            :color="response.response.data.secret"
+                            :pictureUrl="pictureUrl">
+                    </answer>
+                    <br>
+                    <p>
+                        <button class="button" @click="endQuestion()">OK</button>
+                    </p>
+
+                </div>
+
+                </div>
         </section>
 
         <section class="section" v-else>
@@ -76,7 +91,8 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { QrcodeReader } from "vue-qrcode-reader";
-import { getRequest, acceptRequest, denyRequest } from "../api";
+import { getRequest, acceptRequest, denyRequest, getPictureUrl } from "../api";
+import Answer from "../components/Answer";
 
 export default {
   data() {
@@ -87,6 +103,7 @@ export default {
       inputSession: "",
       inputUsername: "aj.jansen",
       pincode: "1234",
+      pictureUrl: null,
       loggedIn: false
     };
   },
@@ -94,7 +111,8 @@ export default {
     ...mapGetters(["username", "debug"])
   },
   components: {
-    QrcodeReader
+    QrcodeReader,
+    answer: Answer
   },
   methods: {
     ...mapActions({
@@ -114,29 +132,25 @@ export default {
     },
     async acceptQuestion() {
       this.response = await acceptRequest(this.request.id, this.username);
-      this.endQuestion();
     },
     async denyQuestion() {
       this.response = await denyRequest(this.request.id);
-      this.endQuestion();
     },
     endQuestion() {
-      if (!this.debug) {
-        setTimeout(() => {
-          this.$router.push("/");
-        }, 1000);
-      }
+      this.$router.push("/");
     },
     async onInputSession() {
       // Manual session input
       this.sessionId = this.inputSession;
       this.getRequest(this.sessionId);
     },
-    login() {
+    async login() {
       // Simple login
       if (this.inputUsername && this.pincode) {
         this.loggedIn = true;
         this.setUsername(this.inputUsername);
+        this.pictureUrl = await getPictureUrl(this.inputUsername);
+        this.pictureUrl = this.pictureUrl.response;
       }
     }
   },

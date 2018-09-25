@@ -30,6 +30,17 @@ export async function getFullSession(sessionId) {
   return response.json();
 }
 
+export async function getPictureUrl(username) {
+  const url = DECODE_SERVER + "get_picture_url";
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      username
+    })
+  });
+  return response.json();
+}
+
 export async function getSessionStatus(sessionId) {
   const url = DECODE_SERVER + "get_session_status";
   const response = await fetch(url, {
@@ -74,4 +85,3 @@ export async function denyRequest(sessionId) {
   });
   return response.json();
 }
-

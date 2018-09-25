@@ -12,34 +12,18 @@
 
         <section class="section" v-else-if="request.response === 'FINALIZED'">
             <div class="container">
-                <h1 class="title">Antwoord</h1>
-                <h2 class="subtitle">
-                    {{description}}
-                </h2>
                 <div v-if="session.response.data" class="has-text-centered">
-                    <div v-if="session.response.data.request_status === 'ACCEPTED'">
-                        <p v-if="session.response.data.request_valid">
-                            <span><i class="fa fa-check fa-3x" aria-hidden="true"></i></span>
-                            &nbsp;
-                            <span>OK</span>
-                        </p>
-                        <p v-else>
-                            <span><i class="fa fa-bolt fa-3x" aria-hidden="true"></i></span>
-                            &nbsp;
-                            <span>Nee</span>
-                        </p>
-                    </div>
-                    <div v-else-if="session.response.data.request_status === 'DENIED'">
-                        <p>
-                            <span><i class="fa fa-times fa-3x" aria-hidden="true"></i></span>
-                            &nbsp;
-                            <span>Vraag is geweigerd</span>
-                        </p>
-                    </div>
+
+                    <answer :question="description"
+                            :status="session.response.data.request_status"
+                            :valid="session.response.data.request_valid"
+                            :color="session.response.data.secret">
+                    </answer>
+                    <br>
+                    <p>
+                        <button class="button" @click="endRequest()">OK</button>
+                    </p>
                 </div>
-                <p>
-                    <button class="button is-primary" @click="endRequest()">OK</button>
-                </p>
             </div>
         </section>
 
@@ -66,6 +50,8 @@
 <script>
 import QrcodeVue from "qrcode.vue";
 
+import Answer from "../components/Answer";
+
 import { mapActions, mapGetters } from "vuex";
 import { getSession, getSessionStatus, getFullSession } from "../api";
 
@@ -85,7 +71,8 @@ export default {
     ...mapGetters(["debug"])
   },
   components: {
-    QrcodeVue
+    QrcodeVue,
+    answer: Answer
   },
   methods: {
     ...mapActions({
@@ -100,17 +87,11 @@ export default {
 
       status_requestor = setInterval(async () => {
         this.request = await getSessionStatus(this.session.session_id);
-        if (this.request.response === 'FINALIZED') {
+        if (this.request.response === "FINALIZED") {
           clearInterval(status_requestor);
           this.session = await getFullSession(this.session.session_id);
           this.setSession(this.session);
-          setTimeout(() => {
-            if (!this.debug) {
-              this.endRequest();
-            }
-          }, 2500);
         }
-        // request.response contains status
       }, 1000);
     }
   },
@@ -122,6 +103,5 @@ export default {
       clearInterval(status_requestor);
     }
   }
-
 };
 </script>
