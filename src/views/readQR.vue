@@ -1,6 +1,31 @@
 <template>
     <div>
-        <section class="section" v-if="request">
+        <section class="section" v-if="!loggedIn">
+            <div class="container">
+                <h1 class="title">Login</h1>
+                <div>
+                    <div class="field">
+                        <label class="label">Naam</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Je naam"
+                                   v-model="inputUsername">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Pincode</label>
+                        <div class="control">
+                            <input class="input" type="password" maxlength="4" placeholder="Pincode" pattern="[0-9]{4}"
+                                   v-model="pincode">
+                        </div>
+                    </div>
+                    <p>
+                        <button class="button is-link" @click="login()" :disabled="!(inputUsername && pincode.length === 4)">Log in</button>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" v-else-if="request">
             <div class="container">
                 <h1 class="title">Beantwoord vraag</h1>
                 <div>
@@ -28,16 +53,16 @@
                     <div>
                         <qrcode-reader @decode="onDecode"></qrcode-reader>
                     </div>
-                    <div>
-                        <button class="button is-link" @click="getRequest(sessionId)">Get Request</button>
-                    </div>
                 </div>
                 <div class="field">
-                    <label class="label">Name</label>
+                    <label class="label">Session ID manual input</label>
                     <div class="control">
                         <input class="input" type="text" placeholder="Session code"
                                v-model="inputSession" @change="onInputSession">
                     </div>
+                    <p>
+                        <button class="button is-link" @click="getRequest(sessionId)" :disabled="!inputSession">Get Request</button>
+                    </p>
                 </div>
                 <pre>{{sessionId}}</pre>
             </div>
@@ -46,7 +71,7 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { QrcodeReader } from "vue-qrcode-reader";
 import { getRequest, acceptRequest, denyRequest } from "../api";
 
@@ -56,42 +81,55 @@ export default {
       sessionId: null,
       request: null,
       response: null,
-      inputSession: ""
+      inputSession: "",
+      inputUsername: null,
+      pincode: null,
+      loggedIn: false
     };
   },
   computed: {
-    // ...mapGetters(["session"])
+    ...mapGetters(["username"])
   },
   components: {
     QrcodeReader
   },
   methods: {
+    ...mapActions({
+      setUsername: "setUsername"
+    }),
     onDecode(decodedString) {
+      // QR code scan result
       if (decodedString) {
         this.sessionId = decodedString;
         this.getRequest(this.sessionId);
       }
     },
     async getRequest(sessionId) {
+      // Retrieve request from backend
       this.request = await getRequest(sessionId);
       this.request = this.request.response;
-      console.log("Request", this.request);
     },
     async acceptQuestion() {
-      console.log("Answer request", this.request);
-      this.response = await acceptRequest(this.request.id);
+      this.response = await acceptRequest(this.request.id, this.username);
     },
     async denyQuestion() {
-      console.log("Deny request", this.request);
       this.response = await denyRequest(this.request.id);
     },
     async onInputSession() {
-      console.log("Session", this.inputSession);
+      // Manual session input
       this.sessionId = this.inputSession;
-      await getRequest(this.sessionId);
-
+      this.getRequest(this.sessionId);
+    },
+    login() {
+      // Simple login
+      if (this.inputUsername && this.pincode) {
+        this.loggedIn = true;
+        this.setUsername(this.inputUsername);
+      }
     }
-
+  },
+  mounted() {
+    this.loggedIn = !!this.username;
   }
 };
 </script>

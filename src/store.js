@@ -5,23 +5,31 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    session: {
-      message: "nothing"
-    }
+    session: {},
+    username: null
   },
   mutations: {
     session(state, session) {
       state.session = session;
+    },
+    username(state, username) {
+      state.username = username;
     }
   },
   actions: {
     setSession(store, session) {
       store.commit("session", session);
+    },
+    setUsername(store, username) {
+      store.commit("username", username);
     }
   },
   getters: {
     session: state => {
       return state.session;
+    },
+    username: state => {
+      return state.username;
     }
   }
 });

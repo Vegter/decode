@@ -52,13 +52,13 @@ export async function getRequest(sessionId) {
   return response.json();
 }
 
-export async function acceptRequest(sessionId) {
+export async function acceptRequest(sessionId, username) {
   const url = DECODE_SERVER + "accept_request";
   const response = await fetch(url, {
     method: "POST",
     body: JSON.stringify({
       session_id: sessionId,
-      username: "p.pietersen"
+      username: username
     })
   });
   return response.json();
