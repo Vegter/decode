@@ -7,13 +7,13 @@ export async function get_data(path) {
   return result;
 }
 
-export async function getSession() {
+export async function getSession(attribute_request, description) {
   const url = DECODE_SERVER + "init_disclosure";
   const response = await fetch(url, {
     method: "POST",
     body: JSON.stringify({
-      attribute_request: "ouderdan18",
-      description: "Ben je 18 jaar of ouder?"
+      attribute_request,
+      description
     })
   });
   return response.json();

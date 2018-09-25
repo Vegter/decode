@@ -82,8 +82,8 @@ export default {
       request: null,
       response: null,
       inputSession: "",
-      inputUsername: null,
-      pincode: null,
+      inputUsername: "aj.jansen",
+      pincode: "1234",
       loggedIn: false
     };
   },

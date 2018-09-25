@@ -1,21 +1,47 @@
 <template>
     <div>
-
         <section class="section" v-if="request.response === 'STARTED'">
             <div class="container">
                 <h1 class="title">Wacht op antwoord...</h1>
+                <h2 class="subtitle has-text-centered">
+                    <i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>
+                </h2>
             </div>
         </section>
 
         <section class="section" v-else-if="request.response === 'FINALIZED'">
             <div class="container">
                 <h1 class="title">Antwoord</h1>
+                <h2 class="subtitle">
+                    {{description}}
+                </h2>
+                <div v-if="session.response.data" class="has-text-centered">
+                    <div v-if="session.response.data.request_status === 'ACCEPTED'">
+                        <p v-if="session.response.data.request_valid">
+                            <span><i class="fa fa-check fa-3x" aria-hidden="true"></i></span>
+                            &nbsp;
+                            <span>OK</span>
+                        </p>
+                        <p v-else>
+                            <span><i class="fa fa-bolt fa-3x" aria-hidden="true"></i></span>
+                            &nbsp;
+                            <span>Nee</span>
+                        </p>
+                    </div>
+                    <div v-else-if="session.response.data.request_status === 'DENIED'">
+                        <p>
+                            <span><i class="fa fa-times fa-3x" aria-hidden="true"></i></span>
+                            &nbsp;
+                            <span>Vraag is geweigerd</span>
+                        </p>
+                    </div>
+                </div>
             </div>
         </section>
 
         <section class="section" v-else>
             <div class="container">
-                <h1 class="title">Ben je 18 jaar of ouder?</h1>
+                <h1 class="title">{{description}}</h1>
                 <h2 class="subtitle">
                     Scan onderstaande code om deze vraag te beantwoorden
                 </h2>
@@ -43,7 +69,9 @@ export default {
     return {
       size: 300,
       session: {},
-      request: {}
+      request: {},
+      attribute: "ouderdan18",
+      description: "Ben je 18 jaar of ouder?"
     };
   },
   components: {
@@ -54,7 +82,7 @@ export default {
       setSession: "setSession"
     }),
     async getSession() {
-      this.session = await getSession();
+      this.session = await getSession(this.attribute, this.description);
       this.setSession(this.session);
 
       status_requestor = setInterval(async () => {

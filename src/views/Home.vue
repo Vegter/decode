@@ -8,6 +8,13 @@
         <h2 class="subtitle">
           Digital Identity
         </h2>
+          <section class="section">
+              <div class="container">
+                  <button class="button is-link" @click="startRequester()">Barman</button>
+                  &nbsp;
+                  <button class="button is-link" @click="startVisitor()">Bezoeker</button>
+              </div>
+          </section>
       </div>
     </div>
   </section>
@@ -26,7 +33,14 @@ export default {
     ...mapGetters(["session"])
   },
   components: {},
-  methods: {},
+  methods: {
+    startRequester() {
+      this.$router.push("/showQR");
+    },
+    startVisitor() {
+      this.$router.push("/readQR");
+    }
+  },
   mounted() {}
 };
 </script>
