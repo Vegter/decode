@@ -108,7 +108,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["username", "debug"])
+    ...mapGetters(["username", "debug", "sessionId"])
   },
   components: {
     QrcodeReader,

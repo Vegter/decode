@@ -35,7 +35,7 @@
                 </h2>
                 <div>
                     <qrcode-vue :value="baseUrl + session.session_id" :size="size" level="H"></qrcode-vue>
-                    <div>{{session.session_id}}</div>
+                    <div>{{baseUrl}}{{session.session_id}}</div>
                 </div>
             </div>
         </section>
@@ -65,7 +65,7 @@ export default {
       request: {},
       attribute: "ouderdan18",
       description: "Ben je 18 jaar of ouder?",
-      baseUrl: window.location['origin'] + "/readQR?session="
+      baseUrl: window.location['origin'] + "?session="
     };
   },
   computed: {

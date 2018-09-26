@@ -60,7 +60,8 @@ export default {
     console.log("Session ID (/):", sessionId);
     if (sessionId) {
       console.log('Session read');
-
+      // this.$router.push('/readQR');
+      this.$router.push({ path: 'readQR', query: { session: sessionId }})
     }
   }
 };
