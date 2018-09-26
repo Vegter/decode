@@ -3,7 +3,7 @@
 
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <a class="navbar-item" href="#">
+        <a class="navbar-item" href="/">
           <img src="./assets/decode-logo.png">
         </a>
 
@@ -57,9 +57,10 @@ export default {
   },
   mounted() {
     const sessionId = this.$route.query.session;
-    console.log("Session ID", sessionId);
+    console.log("Session ID (/):", sessionId);
     if (sessionId) {
       console.log('Session read');
+
     }
   }
 };

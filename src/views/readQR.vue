@@ -156,6 +156,13 @@ export default {
   },
   mounted() {
     this.loggedIn = !!this.username;
+    this.sessionId = this.$route.query.session;
+    console.log("Session ID (/readQR):", this.sessionId);
+
+    if(this.sessionId) {
+      this.getRequest(this.sessionId);
+      console.log(this.request);
+    }
   }
 };
 </script>
