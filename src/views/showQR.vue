@@ -34,8 +34,8 @@
                     Scan onderstaande code om deze vraag te beantwoorden
                 </h2>
                 <div>
-                    <qrcode-vue :value="baseUrl + session.session_id" :size="size" level="H"></qrcode-vue>
-                    <div>{{baseUrl}}{{session.session_id}}</div>
+                    <qrcode-vue :value="url + session.session_id" :size="size" level="H"></qrcode-vue>
+                    <div>{{url}}{{session.session_id}}</div>
                 </div>
             </div>
         </section>
@@ -65,7 +65,9 @@ export default {
       request: {},
       attribute: "ouderdan18",
       description: "Ben je 18 jaar of ouder?",
-      baseUrl: window.location['origin'] + "?session="
+      url: window.location['origin'] === 'http://localhost:8080' 
+        ? window.location['origin'] + "?session="
+        : window.location['origin'] + "/decode" + "?session="
     };
   },
   computed: {

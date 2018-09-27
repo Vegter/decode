@@ -29,6 +29,7 @@
             <div class="container">
                 <div v-if="!response">
                     <h1 class="title">Beantwoord vraag</h1>
+
                     <h2 class="subtitle">
                         {{request.description}}
                     </h2>
@@ -37,6 +38,9 @@
                         &nbsp;
                         <button class="button is-danger" @click="denyQuestion()">Weiger</button>
                     </div>
+                    <h2 class="subtitle">
+                        {{sessionId}}
+                    </h2>
                 </div>
 
                 <div v-else-if="response.response.data" class="has-text-centered">
@@ -63,8 +67,22 @@
                     <h2 class="subtitle">
                         Scan de QR code om de identiteitsvraag te lezen
                     </h2>
+
+                    <!-- <div class="card">
+                        <div class="card-content">
+                        <div class="content">
+                            Tijdelijk kan QR code alleen worden gescant met je eigen camera functie of overige QR code scanner.
+                        </div>
+                        <div class="content">
+                            Groetjes, <br/> De developers
+                        </div>
+
+                        </div>
+                    </div> -->
+
                     <div>
                         <qrcode-reader @decode="onDecode"></qrcode-reader>
+                        <!-- <br/> -->
                     </div>
                 </div>
                 <div class="field">
@@ -121,7 +139,17 @@ export default {
     onDecode(decodedString) {
       // QR code scan result
       if (decodedString) {
-        this.sessionId = decodedString;
+        if (decodedString.includes("http")) {
+          let qPos = decodedString.indexOf("?");
+          this.sessionId = decodedString.substring(
+            qPos + "?session=".length,
+            decodedString.length
+          );
+          console.log(this.sessionId);
+        } else {
+          this.sessionId = decodedString;
+        }
+
         this.getRequest(this.sessionId);
       }
     },
@@ -141,7 +169,16 @@ export default {
     },
     async onInputSession() {
       // Manual session input
-      this.sessionId = this.inputSession;
+      if (this.inputSession.includes("http")) {
+        let qPos = this.inputSession.indexOf("?");
+        this.sessionId = this.inputSession.substring(
+          qPos + "?session=".length,
+          this.inputSession.length
+        );
+        console.log(this.sessionId);
+      } else {
+        this.sessionId = this.inputSession;
+      }
       this.getRequest(this.sessionId);
     },
     async login() {
@@ -159,7 +196,7 @@ export default {
     this.sessionId = this.$route.query.session;
     console.log("Session ID (/readQR):", this.sessionId);
 
-    if(this.sessionId) {
+    if (this.sessionId) {
       this.getRequest(this.sessionId);
       console.log(this.request);
     }
