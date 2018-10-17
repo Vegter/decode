@@ -65,9 +65,10 @@ export default {
       request: {},
       attribute: "ouderdan18",
       description: "Ben je 18 jaar of ouder?",
-      url: window.location['origin'] === 'http://localhost:8080' 
-        ? window.location['origin'] + "?session="
-        : window.location['origin'] + "/decode" + "?session="
+      url:
+        window.location["origin"] === "http://localhost:8080"
+          ? window.location["origin"] + "?session="
+          : window.location["origin"] + "/decode" + "?session="
     };
   },
   computed: {

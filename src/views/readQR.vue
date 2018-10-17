@@ -145,7 +145,6 @@ export default {
             qPos + "?session=".length,
             decodedString.length
           );
-          console.log(this.sessionId);
         } else {
           this.sessionId = decodedString;
         }
@@ -175,7 +174,6 @@ export default {
           qPos + "?session=".length,
           this.inputSession.length
         );
-        console.log(this.sessionId);
       } else {
         this.sessionId = this.inputSession;
       }
@@ -194,11 +192,9 @@ export default {
   mounted() {
     this.loggedIn = !!this.username;
     this.sessionId = this.$route.query.session;
-    console.log("Session ID (/readQR):", this.sessionId);
 
     if (this.sessionId) {
       this.getRequest(this.sessionId);
-      console.log(this.request);
     }
   }
 };

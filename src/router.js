@@ -33,6 +33,12 @@ export default new Router({
       name: "readQR",
       component: () =>
         import(/* webpackChunkName: "readQR" */ "./views/readQR.vue")
+    },
+    {
+      path: "/zenroom",
+      name: "zenroom",
+      component: () =>
+        import(/* webpackChunkName: "zenroom" */ "./views/zenroom.vue")
     }
   ]
 });
