@@ -1,16 +1,32 @@
 <template>
     <div class="has-text-centered">
-        <button class="button" @click="run('Encrypt')">
+        <button class="button" @click="run('Keypair')">
+            Generate keypair
+        </button>
+        <br>
+        <div>
+            Result
+            <pre>{{keypair}}</pre>
+        </div>
+
+        <!-- <button class="button" @click="run('Encrypt')">
             Encrypt
         </button>
         <br>
         <div>
             Result
             <pre>{{encrypted}}</pre>
+        </div> -->
+        <br>
+        <div class="control">
+          <input class="input" type="text" placeholder="Encrypted data"
+            v-model="inputEncrypted" @change="setEncryptedData">
         </div>
+        <br>
         <button class="button" @click="run('Decrypt')">
-            Decrypt
+          Decrypt
         </button>
+
         <br>
         <div>
             Result
@@ -25,9 +41,10 @@
 
 <script>
 import _keys from "raw-loader!../zenroom/keypair.keys";
+import _attributes from "raw-loader!../zenroom/attributes.data";
+import _keygen from "raw-loader!../zenroom/keygen.lua";
 import _encrypt from "raw-loader!../zenroom/encrypt_message.lua";
 import _decrypt from "raw-loader!../zenroom/decrypt_message.lua";
-import _attributes from "raw-loader!../zenroom/attributes.data";
 
 export default {
   name: "zenroom",
@@ -35,15 +52,36 @@ export default {
     return {
       result: "",
       encrypted: "",
-      decrypted: ""
+      keypair: "",
+      decrypted: "",
+      inputEncrypted: ""
     };
   },
   methods: {
+    async setEncryptedData() {
+      this.encrypted = this.inputEncrypted;
+    },
     run(method) {
       window.Module = {
         ...window.Module,
         exec_ok: () => (this.result += " OK"),
         exec_error: () => (this.result += " ERROR")
+      };
+
+      const generateKeypair = () => {
+        window.Module.print = text => (this.keypair = text);
+
+        const keys = null;
+        const data = null;
+        const conf = null;
+        const script = _keygen;
+
+        window.Module.ccall(
+          "zenroom_exec",
+          "number",
+          ["string", "string", "string", "string", "number"],
+          [script, conf, keys, data, 1]
+        );
       };
 
       const encrypt = () => {
@@ -52,7 +90,7 @@ export default {
         const keys = _keys;
         const data = _attributes;
         const conf = null;
-        const script = _encrypt;
+        const script = _keygen;
 
         window.Module.ccall(
           "zenroom_exec",
@@ -65,7 +103,7 @@ export default {
       const decrypt = () => {
         window.Module.print = text => (this.decrypted = text);
 
-        const keys = _keys;
+        const keys = this.keypair;
         const data = this.encrypted;
         const conf = null;
         const script = _decrypt;
@@ -82,6 +120,8 @@ export default {
         encrypt();
       } else if (method === "Decrypt") {
         decrypt();
+      } else if (method === "Keypair") {
+        generateKeypair();
       }
     }
   },
