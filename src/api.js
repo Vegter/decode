@@ -1,5 +1,5 @@
-// const DECODE_SERVER = "http://185.54.115.75:5000/";
-const DECODE_SERVER = "https://decode.stadswerken.amsterdam/";
+const DECODE_SERVER = "http://127.0.0.1:5000/";
+// const DECODE_SERVER = "https://decode.stadswerken.amsterdam/";
 
 export async function get_data(path) {
   var url = DECODE_SERVER + path;
@@ -24,6 +24,18 @@ export async function getFullSession(sessionId) {
   const response = await fetch(url, {
     method: "POST",
     body: JSON.stringify({
+      session_id: sessionId
+    })
+  });
+  return response.json();
+}
+
+export async function attachPublicKey(publicKey, sessionId) {
+  const url = DECODE_SERVER + "attach_public_key";
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      public_key: publicKey,
       session_id: sessionId
     })
   });

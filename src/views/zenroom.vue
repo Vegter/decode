@@ -36,6 +36,9 @@
         <div>
             Last result: {{result}}
         </div>
+        <div>
+          <img v-bind:src="faceImage" />
+        </div>
     </div>
 </template>
 
@@ -43,7 +46,7 @@
 import _keys from "raw-loader!../zenroom/keypair.keys";
 import _attributes from "raw-loader!../zenroom/attributes.data";
 import _keygen from "raw-loader!../zenroom/keygen.lua";
-import _encrypt from "raw-loader!../zenroom/encrypt_message.lua";
+// import _encrypt from "raw-loader!../zenroom/encrypt_message.lua";
 import _decrypt from "raw-loader!../zenroom/decrypt_message.lua";
 
 export default {
@@ -54,12 +57,19 @@ export default {
       encrypted: "",
       keypair: "",
       decrypted: "",
-      inputEncrypted: ""
+      inputEncrypted: "",
+      faceImage: ""
     };
   },
   methods: {
     async setEncryptedData() {
       this.encrypted = this.inputEncrypted;
+    },
+    handleData(data) {
+      data = data.replace(/\\/g, "");
+      dataJson = JSON.parse(data);
+
+      this.faceImage = dataJson.image_base64;
     },
     run(method) {
       window.Module = {
@@ -101,7 +111,9 @@ export default {
       };
 
       const decrypt = () => {
-        window.Module.print = text => (this.decrypted = text);
+        window.Module.print = text => (
+          this.decrypted = text,
+          this.handleData(text));
 
         const keys = this.keypair;
         const data = this.encrypted;

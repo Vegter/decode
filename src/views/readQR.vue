@@ -25,6 +25,24 @@
             </div>
         </section>
 
+        <section class="section" v-else-if="onboardingRequest">
+            <div class="container">
+                <div>
+                    <h1 class="title">Join onboaring?</h1>
+                    <button class="button is-link" @click="joinOnboarding()">YES!</button>
+                </div>
+                <br/>
+                <div v-if="result">
+                    <h2 class="subtitle">Public key attached to session</h2>
+                </div>
+                <br/>
+                <div>
+                    <button class="button is-link" @click="handleEncrypedData()">Handle Encrypted Data</button>
+                    <p>{{decrypted}}</p>
+                </div>
+            </div>
+        </section>
+
         <section class="section" v-else-if="request">
             <div class="container">
                 <div v-if="!response">
@@ -109,20 +127,29 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { QrcodeReader } from "vue-qrcode-reader";
-import { getRequest, acceptRequest, denyRequest, getPictureUrl } from "../api";
+import { getRequest, acceptRequest, denyRequest, getPictureUrl, attachPublicKey } from "../api";
 import Answer from "../components/Answer";
+// Zenroom
+import _keygen from "raw-loader!../zenroom/keygen.lua";
+import _decrypt from "raw-loader!../zenroom/decrypt_message.lua";
 
 export default {
   data() {
     return {
       sessionId: null,
       request: null,
+      onboardingRequest: null,
       response: null,
       inputSession: "",
       inputUsername: "aj.jansen",
       pincode: "1234",
       pictureUrl: null,
-      loggedIn: false
+      loggedIn: false,
+      result: null,
+      keypair: null,
+      encryptedData: null,
+      decrypted: null,
+      session: null
     };
   },
   computed: {
@@ -152,10 +179,75 @@ export default {
         this.getRequest(this.sessionId);
       }
     },
+    zenroom(method) {
+      window.Module = {
+        ...window.Module,
+        exec_ok: () => (this.result += " OK"),
+        exec_error: () => (this.result += " ERROR")
+      };
+
+      const keypair = () => {
+        window.Module.print = text => (this.keypair = text);
+
+        const keys = null;
+        const data = null;
+        const conf = null;
+        const script = _keygen;
+
+        window.Module.ccall(
+          "zenroom_exec",
+          "number",
+          ["string", "string", "string", "string", "number"],
+          [script, conf, keys, data, 1]
+        );
+      };
+
+      const decrypt = () => {
+        window.Module.print = text => (this.decrypted = text);
+
+        const keys = this.keypair;
+        const data = this.encryptedData;
+        const conf = null;
+        const script = _decrypt;
+
+        window.Module.ccall(
+          "zenroom_exec",
+          "number",
+          ["string", "string", "string", "string", "number"],
+          [script, conf, keys, data, 1]
+        );
+      };
+
+
+      if (method === "keypair") {
+        keypair();
+      } else if(method === "decrypt") {
+        decrypt();
+      }
+    },
+    joinOnboarding() {
+      this.zenroom("keypair");
+      this.result = this.keypair;
+      this.keypair = JSON.parse(this.keypair);
+      this.sendPublicKey(this.keypair.public);
+    },
+    async sendPublicKey(publicKey) {
+      this.response = await attachPublicKey(publicKey, this.sessionId);
+      this.result = this.response;
+    },
+    async handleEncrypedData() {
+      this.session = await getRequest(this.sessionId);
+      console.log(this.session);
+      this.encryptedData = this.session.data.encrypted;
+      this.zenroom('decrypt');
+    },
     async getRequest(sessionId) {
-      // Retrieve request from backend
       this.request = await getRequest(sessionId);
-      this.request = this.request.response;
+      if (this.request.response.request === "onboarding") {
+        this.onboardingRequest = this.request.response;
+      } else {
+        this.request = this.request.response;
+      }
     },
     async acceptQuestion() {
       this.response = await acceptRequest(this.request.id, this.username);
@@ -177,6 +269,7 @@ export default {
       } else {
         this.sessionId = this.inputSession;
       }
+      this.result = this.sessionId;
       this.getRequest(this.sessionId);
     },
     async login() {
