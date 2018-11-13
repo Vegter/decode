@@ -127,7 +127,13 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { QrcodeReader } from "vue-qrcode-reader";
-import { getRequest, acceptRequest, denyRequest, getPictureUrl, attachPublicKey } from "../api";
+import {
+  getRequest,
+  acceptRequest,
+  denyRequest,
+  getPictureUrl,
+  attachPublicKey
+} from "../api";
 import Answer from "../components/Answer";
 // Zenroom
 import _keygen from "raw-loader!../zenroom/keygen.lua";
@@ -218,18 +224,17 @@ export default {
         );
       };
 
-
       if (method === "keypair") {
         keypair();
-      } else if(method === "decrypt") {
+      } else if (method === "decrypt") {
         decrypt();
       }
     },
     joinOnboarding() {
       this.zenroom("keypair");
       this.result = this.keypair;
-      this.keypair = JSON.parse(this.keypair);
-      this.sendPublicKey(this.keypair.public);
+      // this.keypair = JSON.parse(this.keypair);
+      this.sendPublicKey(JSON.parse(this.keypair).public);
     },
     async sendPublicKey(publicKey) {
       this.response = await attachPublicKey(publicKey, this.sessionId);
@@ -237,9 +242,8 @@ export default {
     },
     async handleEncrypedData() {
       this.session = await getRequest(this.sessionId);
-      console.log(this.session);
-      this.encryptedData = this.session.data.encrypted;
-      this.zenroom('decrypt');
+      this.encryptedData = this.session.response.data.encrypted;
+      this.zenroom("decrypt");
     },
     async getRequest(sessionId) {
       this.request = await getRequest(sessionId);
