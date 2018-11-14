@@ -43,7 +43,7 @@
 import _keys from "raw-loader!../zenroom/keypair.keys";
 import _attributes from "raw-loader!../zenroom/attributes.data";
 import _keygen from "raw-loader!../zenroom/keygen.lua";
-import _encrypt from "raw-loader!../zenroom/encrypt_message.lua";
+// import _encrypt from "raw-loader!../zenroom/encrypt_message.lua";
 import _decrypt from "raw-loader!../zenroom/decrypt_message.lua";
 
 export default {
