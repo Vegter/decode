@@ -27,7 +27,7 @@
 
         <section class="section" v-else-if="onboardingRequest">
             <div class="container">
-                <div>
+                <!-- <div>
                     <h1 class="title">Join onboarding?</h1>
                     <button class="button is-link" @click="joinOnboarding()">YES!</button>
                 </div>
@@ -35,10 +35,8 @@
                 <div v-if="result">
                     <h2 class="subtitle">Public key attached to session</h2>
                 </div>
-                <br/>
+                <br/> -->
                 <div>
-                    <button class="button is-link" @click="handleEncrypedData()">Handle Encrypted Data</button>
-                    <!-- <p>{{decrypted}}</p> -->
                     <div v-if="data">
                       <pre>{{data[0]}}</pre>
                       <img v-bind:src="'data:image/jpeg;base64,'+image" />
@@ -131,6 +129,8 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { QrcodeReader } from "vue-qrcode-reader";
+import { socket, joinRoom } from "../services/sockets";
+import { setItem, getItem } from "../services/persistent_storage";
 import {
   getRequest,
   acceptRequest,
@@ -256,6 +256,9 @@ export default {
       var decryptedObj = JSON.parse(this.decrypted)
       this.data = JSON.parse(decryptedObj.data)
       this.image = this.data[1].image_base64
+
+      setItem("personal_data", this.data[0]);
+      setItem("personal_photo", this.image);
     },
     async getRequest(sessionId) {
       this.request = await getRequest(sessionId);
@@ -264,6 +267,9 @@ export default {
       } else {
         this.request = this.request.response;
       }
+
+      joinRoom(this.sessionId);
+      this.joinOnboarding();
     },
     async acceptQuestion() {
       this.response = await acceptRequest(this.request.id, this.username);
@@ -305,6 +311,14 @@ export default {
     if (this.sessionId) {
       this.getRequest(this.sessionId);
     }
+
+    const onStatus = data => console.log(data)
+    socket.on('status_update', (data) => {
+      onStatus(data)
+      if(data.status == "FINALIZED") {
+        this.handleEncrypedData()
+      }
+    })
   }
 };
 </script>
