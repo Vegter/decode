@@ -38,7 +38,11 @@
                 <br/>
                 <div>
                     <button class="button is-link" @click="handleEncrypedData()">Handle Encrypted Data</button>
-                    <p>{{decrypted}}</p>
+                    <!-- <p>{{decrypted}}</p> -->
+                    <div v-if="data">
+                      <pre>{{data[0]}}</pre>
+                      <img v-bind:src="'data:image/jpeg;base64,'+image" />
+                    </div>
                 </div>
             </div>
         </section>
@@ -155,7 +159,9 @@ export default {
       keypair: null,
       encryptedData: null,
       decrypted: null,
-      session: null
+      session: null,
+      data: null,
+      image: null
     };
   },
   computed: {
@@ -209,7 +215,7 @@ export default {
       };
 
       const decrypt = () => {
-        window.Module.print = text => (this.decrypted = text);
+        window.Module.print = text => this.setDecryptedValue(text);
 
         const keys = this.keypair;
         const data = this.encryptedData;
@@ -244,6 +250,12 @@ export default {
       this.session = await getRequest(this.sessionId);
       this.encryptedData = this.session.response.data.encrypted;
       this.zenroom("decrypt");
+    },
+    setDecryptedValue(value) {
+      this.decrypted = value
+      var decryptedObj = JSON.parse(this.decrypted)
+      this.data = JSON.parse(decryptedObj.data)
+      this.image = this.data[1].image_base64
     },
     async getRequest(sessionId) {
       this.request = await getRequest(sessionId);
