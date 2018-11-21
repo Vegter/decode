@@ -28,7 +28,7 @@
         <section class="section" v-else-if="onboardingRequest">
             <div class="container">
                 <div>
-                    <h1 class="title">Join onboaring?</h1>
+                    <h1 class="title">Join onboarding?</h1>
                     <button class="button is-link" @click="joinOnboarding()">YES!</button>
                 </div>
                 <br/>
