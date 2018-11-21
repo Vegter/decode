@@ -159,7 +159,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["username", "debug", "sessionId"])
+    ...mapGetters(["username", "debug"])
   },
   components: {
     QrcodeReader,

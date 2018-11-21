@@ -3,7 +3,7 @@
     <div class="hero-body">
       <div class="container">
         <h1 class="title">
-          DECODE
+          DECODE<span v-if="hasLocalStorage">*</span>
         </h1>
         <h2 class="subtitle">
           Digital Identity
@@ -23,11 +23,14 @@
 <script>
 // @ is an alias to /src
 import { mapGetters } from "vuex";
+import { setItem, getItem, removeItem } from "../services/persistent_storage";
 
 export default {
   name: "home",
   data() {
-    return {};
+    return {
+      hasLocalStorage: null
+    };
   },
   computed: {
     ...mapGetters(["session"])
@@ -41,6 +44,11 @@ export default {
       this.$router.push("/readQR");
     }
   },
-  mounted() {}
+  mounted() {
+    const key = "Local storage";
+    setItem(key, "is available");
+    this.hasLocalStorage = getItem(key);
+    removeItem(key);
+  }
 };
 </script>
