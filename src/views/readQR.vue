@@ -129,8 +129,8 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { QrcodeReader } from "vue-qrcode-reader";
-import { socket, joinRoom } from "../services/sockets";
-import { setItem, getItem } from "../services/persistent_storage";
+import { socket, joinRoom, sessionStatus } from "../services/sockets";
+import { setItem } from "../services/persistent_storage";
 import {
   getRequest,
   acceptRequest,
@@ -252,10 +252,10 @@ export default {
       this.zenroom("decrypt");
     },
     setDecryptedValue(value) {
-      this.decrypted = value
-      var decryptedObj = JSON.parse(this.decrypted)
-      this.data = JSON.parse(decryptedObj.data)
-      this.image = this.data[1].image_base64
+      this.decrypted = value;
+      var decryptedObj = JSON.parse(this.decrypted);
+      this.data = JSON.parse(decryptedObj.data);
+      this.image = this.data[1].image_base64;
 
       setItem("personal_data", this.data[0]);
       setItem("personal_photo", this.image);
@@ -312,13 +312,13 @@ export default {
       this.getRequest(this.sessionId);
     }
 
-    const onStatus = data => console.log(data)
-    socket.on('status_update', (data) => {
-      onStatus(data)
-      if(data.status == "FINALIZED") {
-        this.handleEncrypedData()
+    const onStatus = data => console.log(data);
+    socket.on("status_update", data => {
+      onStatus(data);
+      if (data.status == sessionStatus.GOT_ENCR_DATA) {
+        this.handleEncrypedData();
       }
-    })
+    });
   }
 };
 </script>
