@@ -6,7 +6,7 @@
           DECODE<span v-if="hasLocalStorage">*</span>
         </h1>
         <h2 class="subtitle">
-          Digital Identity
+          Digital Identity by Gemeente Amsterdam
         </h2>
           <section class="section">
               <div class="container">

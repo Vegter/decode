@@ -1,5 +1,4 @@
-// export const socket = window.io.connect("http://localhost:5000");
-export const socket = window.io.connect("http://192.168.1.105:5000");
+export const socket = window.io.connect(process.env.VUE_APP_API);
 
 export function joinRoom(room) {
   socket.emit("join_room", {

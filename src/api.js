@@ -1,6 +1,4 @@
-// const DECODE_SERVER = "http://0.0.0.0:5000/";
-// const DECODE_SERVER = "http://192.168.1.105:5000/";
-const DECODE_SERVER = "http://oscity.nl:5005/";
+const DECODE_SERVER = process.env.VUE_APP_API;
 
 export async function get_data(path) {
   var url = DECODE_SERVER + path;

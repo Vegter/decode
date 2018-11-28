@@ -264,12 +264,11 @@ export default {
       this.request = await getRequest(sessionId);
       if (this.request.response.request === "onboarding") {
         this.onboardingRequest = this.request.response;
+        joinRoom(this.sessionId);
+        this.joinOnboarding();
       } else {
         this.request = this.request.response;
       }
-
-      joinRoom(this.sessionId);
-      this.joinOnboarding();
     },
     async acceptQuestion() {
       this.response = await acceptRequest(this.request.id, this.username);
@@ -299,8 +298,8 @@ export default {
       if (this.inputUsername && this.pincode) {
         this.loggedIn = true;
         this.setUsername(this.inputUsername);
-        this.pictureUrl = await getPictureUrl(this.inputUsername);
-        this.pictureUrl = this.pictureUrl.response;
+        // this.pictureUrl = await getPictureUrl(this.inputUsername);
+        // this.pictureUrl = this.pictureUrl.response;
       }
     }
   },
@@ -319,6 +318,7 @@ export default {
         this.handleEncrypedData();
       }
     });
+    console.log("API URL: " + process.env.VUE_APP_API);
   }
 };
 </script>
