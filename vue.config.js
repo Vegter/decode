@@ -1,5 +1,5 @@
 module.exports = {
-  baseUrl: process.env.NODE_ENV === "production" ? "/decode/" : "/",
+  baseUrl: process.env.NODE_ENV === "production" ? "/" : "/",
   devServer: {
     hot: true,
     disableHostCheck: true,

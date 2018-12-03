@@ -1,53 +1,42 @@
 <template>
     <div class="has-text-centered">
-        <button class="button" @click="run('Keypair')">
-            Generate keypair
-        </button>
-        <br>
-        <div>
-            Result
-            <pre>{{keypair}}</pre>
-        </div>
-
-        <!-- <button class="button" @click="run('Encrypt')">
-            Encrypt
+        <button class="button" @click="run('encrypt')">
+            Encrypt with PBKDF
         </button>
         <br>
         <div>
             Result
             <pre>{{encrypted}}</pre>
-        </div> -->
+        </div>
         <br>
-        <div class="control">
+
+        <!-- <div class="control">
           <input class="input" type="text" placeholder="Encrypted data"
             v-model="inputEncrypted" @change="setEncryptedData">
         </div>
-        <br>
-        <button class="button" @click="run('Decrypt')">
-          Decrypt
-        </button>
+        <br> -->
 
+        <button class="button" @click="run('decrypt')">
+            Decrypt with PBKDF
+        </button>
         <br>
         <div>
             Result
             <pre>{{decrypted}}</pre>
         </div>
         <br>
+
         <div>
             Last result: {{result}}
-        </div>
-        <div>
-          <img v-bind:src="faceImage" />
         </div>
     </div>
 </template>
 
 <script>
-import _keys from "raw-loader!../zenroom/keypair.keys";
-import _attributes from "raw-loader!../zenroom/attributes.data";
-import _keygen from "raw-loader!../zenroom/keygen.lua";
-// import _encrypt from "raw-loader!../zenroom/encrypt_message.lua";
-import _decrypt from "raw-loader!../zenroom/decrypt_message.lua";
+import _pbkdf_encrypt from "raw-loader!../zenroom/pbkdf_encrypt.lua";
+import _pbkdf_encrypt_keys from "raw-loader!../zenroom/pbkdf_encrypt.keys";
+import _pbkdf_decrypt from "raw-loader!../zenroom/pbkdf_decrypt.lua";
+import _pbkdf_decrypt_keys from "raw-loader!../zenroom/pbkdf_decrypt.keys";
 
 export default {
   name: "zenroom",
@@ -55,52 +44,28 @@ export default {
     return {
       result: "",
       encrypted: "",
-      keypair: "",
       decrypted: "",
-      inputEncrypted: "",
-      faceImage: ""
+      inputEncrypted: ""
     };
   },
   methods: {
     async setEncryptedData() {
       this.encrypted = this.inputEncrypted;
     },
-    handleData(data) {
-      data = data.replace(/\\/g, "");
-      dataJson = JSON.parse(data);
-
-      this.faceImage = dataJson.image_base64;
-    },
     run(method) {
       window.Module = {
         ...window.Module,
-        exec_ok: () => (this.result += " OK"),
-        exec_error: () => (this.result += " ERROR")
+        exec_ok: () => (this.result += "ok "),
+        exec_error: () => (this.result += "error ")
       };
 
-      const generateKeypair = () => {
-        window.Module.print = text => (this.keypair = text);
-
-        const keys = null;
-        const data = null;
-        const conf = null;
-        const script = _keygen;
-
-        window.Module.ccall(
-          "zenroom_exec",
-          "number",
-          ["string", "string", "string", "string", "number"],
-          [script, conf, keys, data, 1]
-        );
-      };
-
-      const encrypt = () => {
+      const pbkdfEncrypt = () => {
         window.Module.print = text => (this.encrypted = text);
 
-        const keys = _keys;
-        const data = _attributes;
+        const keys = _pbkdf_encrypt_keys;
+        const data = null;
         const conf = null;
-        const script = _keygen;
+        const script = _pbkdf_encrypt;
 
         window.Module.ccall(
           "zenroom_exec",
@@ -110,15 +75,13 @@ export default {
         );
       };
 
-      const decrypt = () => {
-        window.Module.print = text => (
-          this.decrypted = text,
-          this.handleData(text));
+      const pbkdfDecrypt = () => {
+        window.Module.print = text => (this.decrypted = text);
 
-        const keys = this.keypair;
+        const keys = _pbkdf_decrypt_keys;
         const data = this.encrypted;
         const conf = null;
-        const script = _decrypt;
+        const script = _pbkdf_decrypt;
 
         window.Module.ccall(
           "zenroom_exec",
@@ -128,12 +91,10 @@ export default {
         );
       };
 
-      if (method === "Encrypt") {
-        encrypt();
-      } else if (method === "Decrypt") {
-        decrypt();
-      } else if (method === "Keypair") {
-        generateKeypair();
+      if (method === "encrypt") {
+        pbkdfEncrypt();
+      } else if (method === "decrypt") {
+        pbkdfDecrypt();
       }
     }
   },

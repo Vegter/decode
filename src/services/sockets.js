@@ -2,7 +2,7 @@ export const socket = window.io.connect(process.env.VUE_APP_API);
 
 export function joinRoom(room) {
   socket.emit("join_room", {
-    room: room
+    session_id: room
   });
 }
 
