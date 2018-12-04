@@ -239,7 +239,6 @@ export default {
     joinOnboarding() {
       this.zenroom("keypair");
       this.result = this.keypair;
-      console.log(this.result, typeof this.result)
       // this.keypair = JSON.parse(this.keypair);
       this.sendPublicKey(JSON.parse(this.keypair).public);
     },
@@ -263,7 +262,7 @@ export default {
     },
     async getRequest(sessionId) {
       this.request = await getRequest(sessionId);
-      console.log(this.request, typeof this.request);
+      // console.log(this.request, typeof this.request);
       if (this.request.response.request === "onboarding") {
         this.onboardingRequest = this.request.response;
         joinRoom(this.sessionId);
@@ -313,9 +312,9 @@ export default {
       this.getRequest(this.sessionId);
     }
 
-    const onStatus = data => console.log(data);
+    // const onStatus = data => console.log(data);
     socket.on("status_update", data => {
-      onStatus(data);
+      // onStatus(data);
       if (data.status == sessionStatus.GOT_ENCR_DATA) {
         this.handleEncrypedData();
       }

@@ -3,7 +3,6 @@
 -- This example demonstrates how to take a secret and encrypt it using
 -- a single password, even a small 4 digit PIN.
 
-
 secrets = JSON.decode(KEYS)
 
 ecdh = ECDH.new()
