@@ -12,7 +12,7 @@
             </div>
         </section>
 
-        <section class="section" v-else-if="request">
+        <section class="section" v-else-if="disclosureRequest">
             <div class="container">
                 <div v-if="!response">
                     <answer-question :mymodel="mymodel"></answer-question>
@@ -66,6 +66,7 @@ export default {
       sessionId: null,
       request: null,
       onboardingRequest: null,
+      disclosureRequest: null,
       response: null,
       inputSession: "",
       inputUsername: "aj.jansen",
@@ -164,8 +165,6 @@ export default {
     joinOnboarding() {
       this.zenroom("keypair");
       this.result = this.keypair;
-      console.log(this.result, typeof this.result);
-      // this.keypair = JSON.parse(this.keypair);
       this.sendPublicKey(JSON.parse(this.keypair).public);
     },
     async sendPublicKey(publicKey) {
@@ -188,20 +187,19 @@ export default {
     },
     async getRequest(sessionId) {
       this.request = await getRequest(sessionId);
-      console.log(this.request, typeof this.request);
       if (this.request.response.request === "onboarding") {
         this.onboardingRequest = this.request.response;
         joinRoom(this.sessionId);
         this.joinOnboarding();
       } else {
-        this.request = this.request.response;
+        this.disclosureRequest = this.request.response;
       }
     },
     async acceptQuestion() {
-      this.response = await acceptRequest(this.request.id, this.username);
+      this.response = await acceptRequest(this.disclosureRequest.id, this.username);
     },
     async denyQuestion() {
-      this.response = await denyRequest(this.request.id);
+      this.response = await denyRequest(this.disclosureRequest.id);
     },
     endQuestion() {
       this.$router.push("/");
