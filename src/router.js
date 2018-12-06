@@ -45,6 +45,18 @@ export default new Router({
       name: "showID",
       component: () =>
         import(/* webpackChunkName: "zenroom" */ "./views/showID.vue")
+    },
+    {
+      path: "/question",
+      name: "question",
+      component: () =>
+        import(/* webpackChunkName: "question" */ "./views/QuestionView.vue")
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: () =>
+        import(/* webpackChunkName: "profile" */ "./views/ProfileView.vue")
     }
   ]
 });

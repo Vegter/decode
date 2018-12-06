@@ -1,11 +1,12 @@
 <template>
     <div>
-        <!-- <div>
+        <div>
             <h1 class="title">Join onboarding?</h1>
-            <button class="button is-link" @click="joinOnboarding()">YES!</button>
+            <button class="button is-link" @click="joinOnboarding('yes')">YES</button>
+            <button class="button is-link" @click="joinOnboarding('no')">NO</button>
         </div>
         <br/>
-        <div v-if="result">
+        <!-- <div v-if="result">
             <h2 class="subtitle">Public key attached to session</h2>
         </div>
         <br/> -->

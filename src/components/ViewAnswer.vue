@@ -31,13 +31,16 @@
 
             <br>
         </div>
+        <div>
+            <button class="button is-link" @click="base.return()">Return</button>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
   name: "Answer",
-  props: ["question", "status", "valid", "color", "pictureUrl"]
+  props: ["base", "question", "status", "valid", "color", "pictureUrl"]
 };
 </script>
 

@@ -28,7 +28,7 @@
 <script>
 import QrcodeVue from "qrcode.vue";
 
-import Answer from "../components/Answer";
+// import Answer from "../components/Answer";
 
 import { mapActions, mapGetters } from "vuex";
 import { getSession, getSessionStatus, getFullSession } from "../api";

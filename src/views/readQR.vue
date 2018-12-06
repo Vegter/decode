@@ -50,14 +50,14 @@ import {
   // getPictureUrl,
   attachPublicKey
 } from "../api";
-import Answer from "../components/Answer";
+// import Answer from "../components/Answer";
 // Zenroom
 import _keygen from "raw-loader!../zenroom/keygen.lua";
 import _decrypt from "raw-loader!../zenroom/decrypt_message.lua";
 import Login from "../components/Login";
 import OnboardingRequest from "../components/OnboardingRequest";
 import AnswerQuestion from "../components/AnswerQuestion";
-import ShowAnswer from "../components/ShowAnswer";
+import ViewAnswer from "../components/ViewAnswer";
 import ScanIDQuestion from "../components/ScanIDQuestion";
 
 export default {
@@ -90,12 +90,12 @@ export default {
   },
   components: {
     ScanIDQuestion,
-    ShowAnswer,
+    ViewAnswer,
     AnswerQuestion,
     OnboardingRequest,
     Login,
     QrcodeReader,
-    answer: Answer
+    // answer: Answer
   },
   methods: {
     ...mapActions({
@@ -162,10 +162,14 @@ export default {
         decrypt();
       }
     },
-    joinOnboarding() {
-      this.zenroom("keypair");
-      this.result = this.keypair;
-      this.sendPublicKey(JSON.parse(this.keypair).public);
+    joinOnboarding(answer) {
+      if(answer === 'yes') {
+        this.zenroom("keypair");
+        this.result = this.keypair;
+        this.sendPublicKey(JSON.parse(this.keypair).public);
+      } else {
+        // TODO: send end onboarding request
+      }
     },
     async sendPublicKey(publicKey) {
       this.response = await attachPublicKey(publicKey, this.sessionId);
