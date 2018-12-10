@@ -27,8 +27,6 @@
     <h1>BSN</h1>
     <h2>{{base.bsn}}</h2>
     <br>
-
-    <button class="button is-link" @click="base.scanQR()">Scan QR</button>
   </div>
 </template>
 

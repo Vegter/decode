@@ -1,12 +1,15 @@
 <template>
   <div>
-    <profile :base="base"></profile>
+    <div v-if="!scanQR">
+      <profile :base="base"></profile>
+      <button class="button is-link" @click="openQrScanner()">Scan QR</button>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import Profile from "../components/Profile.vue";
+import Profile from "../components/Profile";
 
 export default {
   data() {
@@ -17,7 +20,7 @@ export default {
       dateOfBirth: "01 01 1990",
       sex: "F",
       nationality: "Dutch",
-      bsn: "552612991"
+      bsn: "552612991",
     };
   },
   computed: {
@@ -26,13 +29,10 @@ export default {
     }
   },
   components: {
-    Profile
+    Profile,
+    ScanQr
   },
   methods: {
-    scanQR() {
-      console.log("Not yet implemented");
-      // TODO: go to QR scanner
-    }
   },
   mounted() {}
 };

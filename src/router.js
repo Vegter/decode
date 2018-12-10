@@ -63,6 +63,12 @@ export default new Router({
       name: "onboarding",
       component: () =>
         import(/* webpackChunkName: "onboarding" */ "./views/OnboardingView.vue")
+    },
+    {
+      path: "/scan",
+      name: "scan",
+      component: () =>
+        import(/* webpackChunkName: "scan" */ "./views/ScanView.vue")
     }
   ]
 });

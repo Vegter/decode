@@ -62,18 +62,7 @@
 <script>
 export default {
   name: "CreateQuestion",
-  props: ["base"],
-  data() {
-    return {
-      selected: "age",
-      selectedAgeRange: "equalOrGreater",
-      selectedSex: "female",
-      ageInput: 18
-    };
-  },
-  methods: {},
-  mounted() {},
-  watch: {}
+  props: ["base"]
 };
 </script>
 

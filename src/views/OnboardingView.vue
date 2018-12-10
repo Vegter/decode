@@ -7,12 +7,14 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import CreatePin from "../components/CreatePin.vue"
+import { getRequest } from '../api';
 
 export default {
   data() {
     return {};
   },
   computed: {
+    ...mapGetters(["getOnboardingRequest"]),
     base() {
       return this;
     }
@@ -25,6 +27,8 @@ export default {
       console.log("Not yet implemented")
     }
   },
-  mounted() {}
+  mounted() {
+    console.log(this.onboardingRequest)
+  }
 };
 </script>
