@@ -1,35 +1,26 @@
 <template>
-    <div class="has-text-centered">
-        <button class="button" @click="run('encrypt')">
-            Encrypt with PBKDF
-        </button>
-        <br>
-        <div>
-            Result
-            <pre>{{encrypted}}</pre>
-        </div>
-        <br>
+  <div class="has-text-centered">
+    <button class="button" @click="run('encrypt')">Encrypt with PBKDF</button>
+    <br>
+    <div>Result
+      <pre>{{encrypted}}</pre>
+    </div>
+    <br>
 
-        <!-- <div class="control">
+    <!-- <div class="control">
           <input class="input" type="text" placeholder="Encrypted data"
             v-model="inputEncrypted" @change="setEncryptedData">
         </div>
-        <br> -->
-
-        <button class="button" @click="run('decrypt')">
-            Decrypt with PBKDF
-        </button>
-        <br>
-        <div>
-            Result
-            <pre>{{decrypted}}</pre>
-        </div>
-        <br>
-
-        <div>
-            Last result: {{result}}
-        </div>
+    <br>-->
+    <button class="button" @click="run('decrypt')">Decrypt with PBKDF</button>
+    <br>
+    <div>Result
+      <pre>{{decrypted}}</pre>
     </div>
+    <br>
+
+    <div>Last result: {{result}}</div>
+  </div>
 </template>
 
 <script>

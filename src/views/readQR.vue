@@ -1,41 +1,41 @@
 <template>
-    <div>
-        <section class="section" v-if="!loggedIn">
-            <div class="container">
-                <login :mymodel="mymodel"></login>
-            </div>
-        </section>
+  <div>
+    <section class="section" v-if="!loggedIn">
+      <div class="container">
+        <login :mymodel="mymodel"></login>
+      </div>
+    </section>
 
-        <section class="section" v-else-if="onboardingRequest">
-            <div class="container">
-                <onboarding-request :mymodel="mymodel"></onboarding-request>
-            </div>
-        </section>
+    <section class="section" v-else-if="onboardingRequest">
+      <div class="container">
+        <onboarding-request :mymodel="mymodel"></onboarding-request>
+      </div>
+    </section>
 
-        <section class="section" v-else-if="disclosureRequest">
-            <div class="container">
-                <div v-if="!response">
-                    <answer-question :mymodel="mymodel"></answer-question>
-                </div>
-
-                <div v-else-if="response.response.data" class="has-text-centered">
-                    <show-answer :mymodel="mymodel"></show-answer>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" v-else>
-            <div class="container">
-                <scan-i-d-question :mymodel="mymodel"></scan-i-d-question>
-            </div>
-        </section>
-
-        <div v-if="debug">
-            <pre>{{sessionId}}</pre>
-            <pre>{{request}}</pre>
-            <pre>{{response}}</pre>
+    <section class="section" v-else-if="disclosureRequest">
+      <div class="container">
+        <div v-if="!response">
+          <answer-question :mymodel="mymodel"></answer-question>
         </div>
+
+        <div v-else-if="response.response.data" class="has-text-centered">
+          <show-answer :mymodel="mymodel"></show-answer>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" v-else>
+      <div class="container">
+        <scan-i-d-question :mymodel="mymodel"></scan-i-d-question>
+      </div>
+    </section>
+
+    <div v-if="debug">
+      <pre>{{sessionId}}</pre>
+      <pre>{{request}}</pre>
+      <pre>{{response}}</pre>
     </div>
+  </div>
 </template>
 
 <script>
@@ -94,7 +94,7 @@ export default {
     AnswerQuestion,
     OnboardingRequest,
     Login,
-    QrcodeReader,
+    QrcodeReader
     // answer: Answer
   },
   methods: {
@@ -163,7 +163,7 @@ export default {
       }
     },
     joinOnboarding(answer) {
-      if(answer === 'yes') {
+      if (answer === "yes") {
         this.zenroom("keypair");
         this.result = this.keypair;
         this.sendPublicKey(JSON.parse(this.keypair).public);
@@ -200,7 +200,10 @@ export default {
       }
     },
     async acceptQuestion() {
-      this.response = await acceptRequest(this.disclosureRequest.id, this.username);
+      this.response = await acceptRequest(
+        this.disclosureRequest.id,
+        this.username
+      );
     },
     async denyQuestion() {
       this.response = await denyRequest(this.disclosureRequest.id);

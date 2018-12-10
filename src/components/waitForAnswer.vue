@@ -1,12 +1,11 @@
 <template>
-<div>
+  <div>
     <h1 class="title">Wacht op antwoord...</h1>
     <h2 class="subtitle has-text-centered">
-        <img src="../assets/animated-logo.gif" width="100">
-        <!--<i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>-->
+      <img src="../assets/animated-logo.gif" width="100">
+      <!--<i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>-->
     </h2>
-
-</div>
+  </div>
 </template>
 
 <script>

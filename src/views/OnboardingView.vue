@@ -1,16 +1,16 @@
 <template>
-    <div>
-        
-    </div>
+  <div>
+    <create-pin :base=base></create-pin>
+  </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import CreatePin from "../components/CreatePin.vue"
 
 export default {
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     base() {
@@ -18,10 +18,13 @@ export default {
     }
   },
   components: {
+    CreatePin
   },
   methods: {
+    createPin() {
+      console.log("Not yet implemented")
+    }
   },
-  mounted() {
-  }
+  mounted() {}
 };
 </script>

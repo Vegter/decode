@@ -1,12 +1,10 @@
 <template>
-<div>
+  <div>
     <h1 class="title">Scan QR Code</h1>
     <div>
-        <h2 class="subtitle">
-            Scan de QR code om de identiteitsvraag te lezen
-        </h2>
+      <h2 class="subtitle">Scan de QR code om de identiteitsvraag te lezen</h2>
 
-        <!-- <div class="card">
+      <!-- <div class="card">
             <div class="card-content">
             <div class="content">
                 Tijdelijk kan QR code alleen worden gescant met je eigen camera functie of overige QR code scanner.
@@ -16,25 +14,32 @@
             </div>
 
             </div>
-        </div> -->
-
-        <div>
-            <qrcode-reader @decode="mymodel.onDecode"></qrcode-reader>
-            <!-- <br/> -->
-        </div>
+      </div>-->
+      <div>
+        <qrcode-reader @decode="mymodel.onDecode"></qrcode-reader>
+        <!-- <br/> -->
+      </div>
     </div>
     <div class="field">
-        <label class="label">Session ID manual input</label>
-        <div class="control">
-            <input class="input" type="text" placeholder="Session code"
-                   v-model="mymodel.inputSession" @change="mymodel.onInputSession">
-        </div>
-        <p>
-            <button class="button is-link" @click="mymodel.getRequest(sessionId)" :disabled="!mymodel.inputSession">Get Request</button>
-        </p>
+      <label class="label">Session ID manual input</label>
+      <div class="control">
+        <input
+          class="input"
+          type="text"
+          placeholder="Session code"
+          v-model="mymodel.inputSession"
+          @change="mymodel.onInputSession"
+        >
+      </div>
+      <p>
+        <button
+          class="button is-link"
+          @click="mymodel.getRequest(sessionId)"
+          :disabled="!mymodel.inputSession"
+        >Get Request</button>
+      </p>
     </div>
-
-</div>
+  </div>
 </template>
 
 <script>

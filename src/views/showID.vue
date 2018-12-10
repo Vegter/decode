@@ -1,11 +1,10 @@
 <template>
-    <div>
-        ID
-        <div v-if="data">
-            <pre>{{data[0]}}</pre>
-            <img v-bind:src="'data:image/jpeg;base64,'+image" />
-        </div>
+  <div>ID
+    <div v-if="data">
+      <pre>{{data[0]}}</pre>
+      <img v-bind:src="'data:image/jpeg;base64,'+image">
     </div>
+  </div>
 </template>
 
 <script>
@@ -24,8 +23,8 @@ export default {
   components: {},
   methods: {},
   mounted() {
-    this.data = JSON.parse(data.data)
-    this.image = this.data[1].image_base64
+    this.data = JSON.parse(data.data);
+    this.image = this.data[1].image_base64;
   }
 };
 </script>

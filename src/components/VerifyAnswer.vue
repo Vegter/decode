@@ -1,17 +1,17 @@
 <template>
-<div>
-    <answer :question="mymodel.request.description"
-            :status="mymodel.response.response.data.request_status"
-            :valid="mymodel.response.response.data.request_valid"
-            :color="mymodel.response.response.data.secret"
-            :pictureUrl="mymodel.pictureUrl">
-    </answer>
+  <div>
+    <answer
+      :question="mymodel.request.description"
+      :status="mymodel.response.response.data.request_status"
+      :valid="mymodel.response.response.data.request_valid"
+      :color="mymodel.response.response.data.secret"
+      :pictureUrl="mymodel.pictureUrl"
+    ></answer>
     <br>
     <p>
-        <button class="button" @click="mymodel.endQuestion()">OK</button>
+      <button class="button" @click="mymodel.endQuestion()">OK</button>
     </p>
-
-</div>
+  </div>
 </template>
 
 <script>

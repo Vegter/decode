@@ -1,28 +1,29 @@
 <template>
-    <div>
-        <section class="section" v-if="request.response === 'STARTED'">
-            <div class="container">
-                <wait-for-answer :mymodel="mymodel"></wait-for-answer>
-            </div>
-        </section>
+  <div>
+    <section class="section" v-if="request.response === 'STARTED'">
+      <div class="container">
+        <!-- <wait-for-answer :mymodel="mymodel"></wait-for-answer> -->
+        <view-answer :mymodel=mymodel></view-answer>
+      </div>
+    </section>
 
-        <section class="section" v-else-if="request.response === 'FINALIZED'">
-            <div class="container">
-                <show-response :mymodel="mymodel"></show-response>
-            </div>
-        </section>
+    <section class="section" v-else-if="request.response === 'FINALIZED'">
+      <div class="container">
+        <show-response :mymodel="mymodel"></show-response>
+      </div>
+    </section>
 
-        <section class="section" v-else>
-            <div class="container">
-                <scan-question :mymodel="mymodel"></scan-question>
-            </div>
-        </section>
+    <section class="section" v-else>
+      <div class="container">
+        <scan-question :mymodel="mymodel"></scan-question>
+      </div>
+    </section>
 
-        <div v-if="debug">
-            <pre>{{session}}</pre>
-            <pre>{{request}}</pre>
-        </div>
+    <div v-if="debug">
+      <pre>{{session}}</pre>
+      <pre>{{request}}</pre>
     </div>
+  </div>
 </template>
 
 <script>
@@ -35,6 +36,7 @@ import { getSession, getSessionStatus, getFullSession } from "../api";
 import ScanQuestion from "../components/ScanQuestion";
 import ShowResponse from "../components/ShowResponse";
 import WaitForAnswer from "../components/waitForAnswer";
+import ViewAnswer from "../components/ViewAnswer"
 
 var status_requestor = null;
 
@@ -63,7 +65,8 @@ export default {
     ShowResponse,
     ScanQuestion,
     QrcodeVue,
-    answer: Answer
+    // answer: Answer,
+    ViewAnswer
   },
   methods: {
     ...mapActions({
