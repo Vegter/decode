@@ -1,15 +1,34 @@
 <template>
-  <div class="answer" :style="{'border-color':color}">
-    <div v-if="pictureUrl && status === 'ACCEPTED' && valid">
+  <div>
+    <div v-if="base.status == 'STARTED'">
+      <h1 class="title">Aan het wachten op antwoord...</h1>
+    </div>
+    <br>
+    <h1>{{base.question}}</h1>
+    <br>
+
+    <div v-if="base.status == 'ACCEPTED'">
+      <div v-if="valid" class="answer" :style="{'border-color': base.color}">
+        <p>Antwoord ontvangen en valide</p>
+      </div>
+      <div v-if="!valid">
+        <p>Antwoord ontvangen maar invalide</p>
+      </div> 
+    </div>
+    <div v-if="base.status == 'DENIED'">
+      <p>Vraag is geweigerd</p>
+    </div>
+    <!-- <div class="answer" :style="{'border-color':base.color}">
+    <div v-if="pictureUrl && status === 'ACCEPTED' && base.valid">
       <img :src="pictureUrl" width="50%">
     </div>
     <div>
       <h1 class="title">Antwoord</h1>
-      <h2 class="subtitle">{{question}}</h2>
+      <h2 class="subtitle">{{base.question}}</h2>
 
       <div class="has-text-centered">
-        <div v-if="status === 'ACCEPTED'">
-          <p v-if="valid" class="isOK">
+        <div v-if="base.status === 'ACCEPTED'">
+          <p v-if="base.valid" class="isOK">
             <span>
               <i class="fa fa-check fa-3x" aria-hidden="true"></i>
             </span>
@@ -24,7 +43,7 @@
             <span>Nee</span>
           </p>
         </div>
-        <div v-else-if="status === 'DENIED'">
+        <div v-else-if="base.status === 'DENIED'">
           <p class="isNotOK">
             <span>
               <i class="fa fa-times fa-3x" aria-hidden="true"></i>
@@ -37,8 +56,10 @@
 
       <br>
     </div>
+    </div> -->
+    <br>
     <div>
-      <button class="button is-link" @click="base.return()">Return</button>
+      <button class="button is-link" @click="base.cancel()">Annuleren</button>
     </div>
   </div>
 </template>
@@ -46,7 +67,7 @@
 <script>
 export default {
   name: "Answer",
-  props: ["base", "question", "status", "valid", "color", "pictureUrl"]
+  props: ["base"]
 };
 </script>
 

@@ -6,8 +6,15 @@ export function joinRoom(room) {
   });
 }
 
+export function closeRoom(room) {
+  socket.emit("close_room", {
+    session_id: room
+  });
+}
+
 export const sessionStatus = {
   INITIALIZED: "INITIALIZED",
+  STARTED: "STARTED",
   GOT_PUB_KEY: "GOT_PUB_KEY",
   GOT_ENCR_DATA: "GOT_ENCR_DATA",
   FINALIZED: "FINALIZED"

@@ -96,3 +96,15 @@ export async function denyRequest(sessionId) {
   });
   return response.json();
 }
+
+export async function createQuestion(description, question) {
+  const url = DECODE_SERVER + "init_disclosure";
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      description: description,
+      attribute_request: question
+    })
+  });
+  return response.json();
+}

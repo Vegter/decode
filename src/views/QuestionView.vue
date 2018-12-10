@@ -1,28 +1,40 @@
 <template>
   <div>
-    <div>
-      <!-- <create-question :base="base"></create-question> -->
+    <div v-if=!sessionId>
+      <create-question :base="base"></create-question>
     </div>
-    <div>
-      <!-- <view-answer :base="base" :question="question" :status="status" :valid="valid" :color="color"></view-answer> -->
+    <div v-if="sessionId && !status">
+      <show-q-r :base="base"></show-q-r>
     </div>
-    <div>
-      <show-q-r :base="base" :session-id="sessionId" :url="url"></show-q-r>
+    <div v-if=status>
+      <view-answer :base="base" :question="question" :status="status" :valid="valid" :color="color"></view-answer>
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import CreateQuestion from "../components/CreateQuestion.vue";
-import ViewAnswer from "../components/ViewAnswer.vue";
-import ShowQR from "../components/ShowQR.vue";
+import { createQuestion } from "../api";
+import { socket, joinRoom, closeRoom, sessionStatus } from "../services/sockets";
+import CreateQuestion from "../components/CreateQuestion";
+import ViewAnswer from "../components/ViewAnswer";
+import ShowQR from "../components/ShowQR";
 
 export default {
   data() {
     return {
-      selectedQuestion: null,
-      question: "null",
+      identity: null,
+      question: null,
+      description: null,
+      selectedQuestion: "age",
+      selectedAgeRange: "equalOrGreater",
+      selectedSex: "female",
+      ageInput: 18,
+      dobDay: null,
+      dobMonth: null,
+      dobYear: null,
+      firstName: null,
+      surname: null,
       status: null,
       valid: null,
       color: null,
@@ -41,17 +53,45 @@ export default {
     ShowQR
   },
   methods: {
-    createQuestion() {
-      console.log("Not yet implemented");
+    create() {
       // TODO: take question inputs and create a session, then show QR of session ID
+      this.description = this.identity + " wil een vraag stellen";
+      if(this.selectedQuestion === 'age') {
+        this.question = {type: this.selectedQuestion, subType: this.selectedAgeRange, data: this.ageInput};
+      } else if(this.selectedQuestion === 'dateOfBirth') {
+        this.question = {type: this.selectedQuestion, data: {day: this.dobDay, month: this.dobMonth, year: this.dobYear}};
+      } else if(this.selectedQuestion === 'name') {
+        this.question = {type: this.selectedQuestion, data: {firstName: this.firstName, surname: this.surname}};
+      } else if(this.selectedQuestion === 'sex') {
+        this.question = {type: this.selectedQuestion, data: this.selectedSex};
+      }
+      
+      console.log(this.description, this.question);
 
-      question = "What is your something?";
-      sessionId = "1234";
-      url = "http://decode.amsterdam";
+      this.sendQuestion(this.description, this.question);
     },
-    return() {
-      console.log("Not yet implemented");
-      // TODO: return to ask question
+    async sendQuestion(description, question) {
+      const response = await createQuestion(this.description, JSON.stringify(this.question));
+      this.sessionId = response.session_id;
+      console.log(this.sessionId);
+
+      joinRoom(this.sessionId);
+
+      socket.on("status_update", data => {
+        if (data.status == sessionStatus.STARTED) {
+          this.status = data.status;
+        }
+        if (data.status == sessionStatus.GOT_ENCR_DATA) {
+          // this.handleEncrypedData();
+        }
+      });
+    },
+    cancel() {
+      closeRoom(this.sessionId)
+      this.sessionId = null
+      this.question = null
+      this.description = null
+      this.status = null
     }
   },
   mounted() {}
