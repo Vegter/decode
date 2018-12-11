@@ -1,16 +1,25 @@
 <template>
-  <div></div>
+  <div>
+    <security-code v-model="code"></security-code>
+    <button class="button is-link" @click="base.checkPin()">Enter</button>
+  </div>
 </template>
 
 <script>
+import SecurityCode from "vue-security-code";
+
 export default {
-  name: "Request",
+  name: "EnterPin",
+  props: ["base"],
   data() {
-    return {};
+    return {
+      code: null,
+    };
   },
   methods: {},
-  mounted() {},
-  watch: {}
+  components: {
+    SecurityCode
+  },
 };
 </script>
 

@@ -1,19 +1,24 @@
 <template>
   <div>
     <answer-question :base="base"></answer-question>
+    <div v-if="authenticate">
+        <enter-pin :base="base"></enter-pin>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import AnswerQuestion from "../components/AnswerQuestion"
 import { denyRequest } from "../api";
-
+import { getItem } from "../services/persistent_storage";
+import AnswerQuestion from "../components/AnswerQuestion";
+import EnterPin from "../components/EnterPin";
 
 export default {
   data() {
     return {
-        request: null
+        request: null,
+        authenticate: false
     };
   },
   computed: {
@@ -23,12 +28,13 @@ export default {
     }
   },
   components: {
-      AnswerQuestion
+      AnswerQuestion,
+      EnterPin
   },
   methods: {
     ...mapActions(['setDisclosureRequest']),
     async acceptQuestion() {
-        // TODO
+        authenticate = true;
     },
     async denyQuestion() {
         const response =  await denyRequest(this.request.id);
@@ -38,6 +44,19 @@ export default {
         
         this.setDisclosureRequest(null);
         this.$router.push("/profile");
+    },
+    checkPin(code) {
+        // TODO: Decrypt local storage with PIN
+        this.validateRequest();
+    },
+    validateRequest() {
+        const personalData = getItem('personal_data');
+
+        if(request.type == "age") {
+            if(request.type.subType == "equal") {
+                // const dateOfBirth = personal_data
+            }
+        }
     }
   },
   mounted() {

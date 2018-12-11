@@ -1,7 +1,7 @@
 <template>
   <div>
     <security-code v-model="code"></security-code>
-    <button class="button is-link" @click="base.createPin()">Accept</button>
+    <button class="button is-link" @click="base.checkPin ? base.secondPin(code) : base.firstPin(code)">Accept</button>
   </div>
 </template>
 
@@ -13,15 +13,13 @@ export default {
   props: ["base"],
   data() {
     return {
-      code: '',
+      code: null,
     };
   },
   methods: {},
   components: {
     SecurityCode
   },
-  mounted() {},
-  watch: {}
 };
 </script>
 

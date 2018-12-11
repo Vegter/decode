@@ -7,7 +7,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import ScanQr from "../components/ScanQr";
-import { getRequest } from "../api"
+import { getRequest } from "../api";
 
 export default {
   data() {
@@ -41,10 +41,10 @@ export default {
       const localResponse = await getRequest(sessionId);
       if(localResponse.response.request == "onboarding") {
         this.setOnboardingRequest(localResponse.response);
-        this.$router.push("/onboarding")
+        this.$router.push("/onboarding");
       } else {
         this.setDisclosureRequest(localResponse.response);
-        this.$router.push("/disclosure")
+        this.$router.push("/disclosure");
       }
     }
   }
