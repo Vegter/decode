@@ -25,7 +25,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setOnboardingRequest: "setOnboardingRequest"
+      setOnboardingRequest: "setOnboardingRequest",
+      setDisclosureRequest: "setDisclosureRequest"
     }),
     return() {
       this.$router.push("/profile");
@@ -39,15 +40,13 @@ export default {
     async handleSessionId(sessionId) {
       const localResponse = await getRequest(sessionId);
       if(localResponse.response.request == "onboarding") {
-        // TODO: handle onboarding
-        const onboardingRequest = localResponse.response;
-        this.setOnboardingRequest(onboardingRequest);
+        this.setOnboardingRequest(localResponse.response);
+        this.$router.push("/onboarding")
       } else {
-        const disclosureRequest = localResponse.response;
-        console.log(disclosureRequest)
+        this.setDisclosureRequest(localResponse.response);
+        this.$router.push("/disclosure")
       }
     }
-  },
-  mounted() {}
+  }
 };
 </script>

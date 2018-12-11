@@ -7,8 +7,8 @@ export default new Vuex.Store({
   state: {
     session: {},
     username: null,
-    onboardingRequest: null,
-    disclosureRequest: null,
+    onboardingRequest: {},
+    disclosureRequest: {},
     debug: false
   },
   mutations: {
@@ -19,7 +19,13 @@ export default new Vuex.Store({
       state.username = username;
     },
     request(state, request) {
-      state.request = request
+      state.request = request;
+    },
+    onboardingRequest(state, request) {
+      state.onboardingRequest = request;
+    },
+    disclosureRequest(state, request) {
+      state.disclosureRequest = request;
     }
   },
   actions: {

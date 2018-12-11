@@ -7,7 +7,7 @@
       <show-q-r :base="base"></show-q-r>
     </div>
     <div v-if=status>
-      <view-answer :base="base" :question="question" :status="status" :valid="valid" :color="color"></view-answer>
+      <view-answer :base="base"></view-answer>
     </div>
   </div>
 </template>
@@ -66,7 +66,7 @@ export default {
         this.question = {type: this.selectedQuestion, data: this.selectedSex};
       }
       
-      console.log(this.description, this.question);
+      // console.log(this.description, this.question);
 
       this.sendQuestion(this.description, this.question);
     },
@@ -78,12 +78,13 @@ export default {
       joinRoom(this.sessionId);
 
       socket.on("status_update", data => {
-        if (data.status == sessionStatus.STARTED) {
-          this.status = data.status;
-        }
-        if (data.status == sessionStatus.GOT_ENCR_DATA) {
-          // this.handleEncrypedData();
-        }
+        this.status = data.status;
+        // if (data.status == sessionStatus.STARTED) {
+        //   this.status = data.status;
+        // }
+        // if (data.status == sessionStatus.GOT_ENCR_DATA) {
+        //   // this.handleEncrypedData();
+        // }
       });
     },
     cancel() {

@@ -1,9 +1,7 @@
 <template>
   <div>
-    <div v-if="!scanQR">
-      <profile :base="base"></profile>
-      <button class="button is-link" @click="openQrScanner()">Scan QR</button>
-    </div>
+    <profile :base="base"></profile>
+    <button class="button is-link" @click="openQrScanner()">Scan QR</button>
   </div>
 </template>
 
@@ -29,11 +27,14 @@ export default {
     }
   },
   components: {
-    Profile,
-    ScanQr
+    Profile
   },
   methods: {
+    openQrScanner() {
+      this.$router.push("/scan")
+    }
   },
-  mounted() {}
+  mounted() {
+  }
 };
 </script>
