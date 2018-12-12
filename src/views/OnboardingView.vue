@@ -12,6 +12,7 @@ import { setItem } from "../services/persistent_storage";
 // import zenroom from 'zenroom';
 import sha512 from 'js-sha512';
 import _keygen from "raw-loader!../zenroom/keygen.lua";
+import _decrypt from "raw-loader!../zenroom/decrypt_message.lua";
 import CreatePin from "../components/CreatePin.vue";
 import { join } from 'path';
 
@@ -60,17 +61,28 @@ export default {
       joinRoom(this.request.id);
     },
     async handleEncrypedData() {
-      this.session = await getRequest(this.sessionId);
+      // debugger;
+      this.session = await getRequest(this.request.id);
       this.encryptedData = this.session.response.data.encrypted;
       this.zenroom("decrypt");
     },
-    handleDecrypted(value) {
-      const decryptedObj = JSON.parse(value);
-      const json_data = JSON.parse(decryptedObj.data);
+    // handleDecrypted(value) {
+    //   const decryptedObj = JSON.parse(value);
+    //   const json_data = JSON.parse(decryptedObj.data);
 
-      setItem("personal_data", json_data[0]);
-      setItem("personal_photo", json_data[1].image_base64);
+    //   setItem("personal_data", json_data[0]);
+    //   setItem("personal_photo", json_data[1].image_base64);
+    // },
+    handleDecrypted(value) {
+      this.decrypted = value;
+      var decryptedObj = JSON.parse(this.decrypted);
+      this.data = JSON.parse(decryptedObj.data);
+      this.image = this.data[1].image_base64;
+
+      setItem("personal_data", this.data[0]);
+      setItem("personal_photo", this.image);
     },
+
     zenroom(method) {
       window.Module = {
         ...window.Module,
@@ -119,6 +131,7 @@ export default {
   },
   mounted() {
     socket.on("status_update", data => {
+      console.log(data);
       if (data.status == sessionStatus.GOT_ENCR_DATA) {
         this.handleEncrypedData();
       }
