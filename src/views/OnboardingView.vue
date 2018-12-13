@@ -66,13 +66,6 @@ export default {
       this.encryptedData = this.session.response.data.encrypted;
       this.zenroom("decrypt");
     },
-    // handleDecrypted(value) {
-    //   const decryptedObj = JSON.parse(value);
-    //   const json_data = JSON.parse(decryptedObj.data);
-
-    //   setItem("personal_data", json_data[0]);
-    //   setItem("personal_photo", json_data[1].image_base64);
-    // },
     handleDecrypted(value) {
       this.decrypted = value;
       var decryptedObj = JSON.parse(this.decrypted);
@@ -82,7 +75,6 @@ export default {
       setItem("personal_data", this.data[0]);
       setItem("personal_photo", this.image);
     },
-
     zenroom(method) {
       window.Module = {
         ...window.Module,
