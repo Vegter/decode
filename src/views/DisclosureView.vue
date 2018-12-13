@@ -10,15 +10,15 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { denyRequest } from "../api";
-import { getItem } from "../services/persistent_storage";
+// import { getItem } from "../services/persistent_storage";
 import AnswerQuestion from "../components/AnswerQuestion";
 import EnterPin from "../components/EnterPin";
 
 export default {
   data() {
     return {
-        request: null,
-        authenticate: false
+      request: null,
+      authenticate: false
     };
   },
   computed: {
@@ -28,35 +28,35 @@ export default {
     }
   },
   components: {
-      AnswerQuestion,
-      EnterPin
+    AnswerQuestion,
+    EnterPin
   },
   methods: {
-    ...mapActions(['setDisclosureRequest']),
+    ...mapActions(["setDisclosureRequest"]),
     async acceptQuestion() {
-        authenticate = true;
+      this.authenticate = true;
     },
     async denyQuestion() {
-        const response =  await denyRequest(this.request.id);
-        if(response.response == "INVALID") {
-            // TODO: error message and return to profile
-        }
-        
-        this.setDisclosureRequest(null);
-        this.$router.push("/profile");
+      const response = await denyRequest(this.request.id);
+      if (response.response == "INVALID") {
+        // TODO: error message and return to profile
+      }
+
+      this.setDisclosureRequest(null);
+      this.$router.push("/profile");
     },
-    checkPin(code) {
-        // TODO: Decrypt local storage with PIN
-        this.validateRequest();
+    checkPin(/*code*/) {
+      // TODO: Decrypt local storage with PIN
+      this.validateRequest();
     },
     validateRequest() {
-        const personalData = getItem('personal_data');
+      // const personalData = getItem("personal_data");
 
-        if(request.type == "age") {
-            if(request.type.subType == "equal") {
-                // const dateOfBirth = personal_data
-            }
+      if (this.request.type == "age") {
+        if (this.request.type.subType == "equal") {
+          // const dateOfBirth = personal_data
         }
+      }
     }
   },
   mounted() {
@@ -64,7 +64,7 @@ export default {
     //   console.log(this.request);
   },
   created() {
-      this.request = this.disclosureRequest;
+    this.request = this.disclosureRequest;
   }
 };
 </script>
