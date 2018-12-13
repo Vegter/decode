@@ -79,6 +79,7 @@ export default {
 
       socket.on("status_update", data => {
         this.status = data.status;
+        debugger;
         if(this.status == "FINALIZED" && !this.finished) {
           this.getAnswer();
           this.finished = true;
@@ -86,6 +87,7 @@ export default {
       });
     },
     async getAnswer() {
+      debugger;
       const response = await getRequest(this.sessionId);
       console.log(response);
     },

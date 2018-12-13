@@ -44,7 +44,7 @@ export default {
       if(requestValid) {
         var requestStatus = "VALID";
       } else {
-        var requestStatus = "UNVALID";
+        var requestStatus = "INVALID";
       }
       // 2. send answer
       const response = await acceptRequest(this.request.id, requestStatus);
