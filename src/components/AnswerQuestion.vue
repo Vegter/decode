@@ -9,7 +9,6 @@
       &nbsp;
       <button class="button is-danger" @click="base.denyQuestion()">Weiger</button>
     </div>
-    <!-- <h2 class="subtitle">{{base.request.id}}</h2> -->
   </div>
 </template>
 

@@ -74,13 +74,13 @@ export async function getRequest(sessionId) {
   return response.json();
 }
 
-export async function acceptRequest(sessionId, username) {
+export async function acceptRequest(sessionId, data) {
   const url = DECODE_SERVER + "accept_request";
   const response = await fetch(url, {
     method: "POST",
     body: JSON.stringify({
       session_id: sessionId,
-      username: username
+      request_response: data
     })
   });
   return response.json();

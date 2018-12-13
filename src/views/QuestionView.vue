@@ -14,7 +14,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { createQuestion } from "../api";
+import { createQuestion, getRequest } from "../api";
 import { socket, joinRoom, closeRoom, sessionStatus } from "../services/sockets";
 import CreateQuestion from "../components/CreateQuestion";
 import ViewAnswer from "../components/ViewAnswer";
@@ -26,7 +26,7 @@ export default {
       identity: null,
       question: null,
       description: null,
-      selectedQuestion: "age",
+      selectedQuestion: "name",
       selectedAgeRange: "equalOrGreater",
       selectedSex: "female",
       ageInput: 18,
@@ -39,7 +39,8 @@ export default {
       valid: null,
       color: null,
       sessionId: null,
-      url: null
+      url: null,
+      finished: false
     };
   },
   computed: {
@@ -73,19 +74,20 @@ export default {
     async sendQuestion(description, question) {
       const response = await createQuestion(this.description, JSON.stringify(this.question));
       this.sessionId = response.session_id;
-      console.log(this.sessionId);
 
       joinRoom(this.sessionId);
 
       socket.on("status_update", data => {
         this.status = data.status;
-        // if (data.status == sessionStatus.STARTED) {
-        //   this.status = data.status;
-        // }
-        // if (data.status == sessionStatus.GOT_ENCR_DATA) {
-        //   // this.handleEncrypedData();
-        // }
+        if(this.status == "FINALIZED" && !this.finished) {
+          this.getAnswer();
+          this.finished = true;
+        }
       });
+    },
+    async getAnswer() {
+      const response = await getRequest(this.sessionId);
+      console.log(response);
     },
     cancel() {
       closeRoom(this.sessionId)

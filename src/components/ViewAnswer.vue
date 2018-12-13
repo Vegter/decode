@@ -7,16 +7,18 @@
     <h1>{{base.question}}</h1>
     <br>
 
-    <div v-if="base.status == 'ACCEPTED'">
-      <div v-if="valid" class="answer" :style="{'border-color': base.color}">
-        <p>Antwoord ontvangen en valide</p>
+    <div v-if="base.status == 'FINALIZED'">
+      <div v-if="base.status == 'ACCEPTED'">
+        <div v-if="valid" class="answer" :style="{'border-color': base.color}">
+          <p>Antwoord ontvangen en valide</p>
+        </div>
+        <div v-if="!valid">
+          <p>Antwoord ontvangen maar invalide</p>
+        </div> 
       </div>
-      <div v-if="!valid">
-        <p>Antwoord ontvangen maar invalide</p>
-      </div> 
-    </div>
-    <div v-if="base.status == 'DENIED'">
-      <p>Vraag is geweigerd</p>
+      <div v-if="base.status == 'DENIED'">
+        <p>Vraag is geweigerd</p>
+      </div>
     </div>
     <!-- <div class="answer" :style="{'border-color':base.color}">
     <div v-if="pictureUrl && status === 'ACCEPTED' && base.valid">

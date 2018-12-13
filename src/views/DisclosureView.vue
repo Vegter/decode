@@ -1,16 +1,18 @@
 <template>
   <div>
-    <answer-question :base="base"></answer-question>
-    <div v-if="authenticate">
-        <enter-pin :base="base"></enter-pin>
+    <div v-if="!continued">
+      <answer-question :base="base"></answer-question>
+    </div>
+    <div v-if="continued">
+      
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { denyRequest } from "../api";
-// import { getItem } from "../services/persistent_storage";
+import { denyRequest, acceptRequest } from "../api";
+import { getItem } from "../services/persistent_storage";
 import AnswerQuestion from "../components/AnswerQuestion";
 import EnterPin from "../components/EnterPin";
 
@@ -18,7 +20,9 @@ export default {
   data() {
     return {
       request: null,
-      authenticate: false
+      continued: false,
+      personalData: null,
+      portraitImage: null
     };
   },
   computed: {
@@ -34,7 +38,20 @@ export default {
   methods: {
     ...mapActions(["setDisclosureRequest"]),
     async acceptQuestion() {
-      this.authenticate = true;
+      this.continued = true;
+      // 1. verify request with local storage
+      const requestValid = this.validateRequest();
+      if(requestValid) {
+        var requestStatus = "VALID";
+      } else {
+        var requestStatus = "UNVALID";
+      }
+      // 2. send answer
+      const response = await acceptRequest(this.request.id, requestStatus);
+      console.log(response);
+
+      // get request for color
+      // show color & portrait 
     },
     async denyQuestion() {
       const response = await denyRequest(this.request.id);
@@ -45,18 +62,28 @@ export default {
       this.setDisclosureRequest(null);
       this.$router.push("/profile");
     },
-    checkPin(/*code*/) {
-      // TODO: Decrypt local storage with PIN
-      this.validateRequest();
-    },
     validateRequest() {
-      // const personalData = getItem("personal_data");
+      this.personalData = getItem("personal_data");
+      this.portraitImage = getItem("personal_photo")
+      this.personalData = JSON.parse(this.personalData)
+      
+      const request = JSON.parse(this.request.request);
+      if (request.type === "age") {
+        const dateOfBirth = this.personalData.date_of_birth;
+        if (request.type.subType === "equal") {
 
-      if (this.request.type == "age") {
-        if (this.request.type.subType == "equal") {
           // const dateOfBirth = personal_data
         }
       }
+      else if(request.type === "name") {
+        const name = this.personalData.name;
+        const firstName = name[1];
+        if(request.data.firstName === firstName) {
+          return true;
+        }
+      }
+
+      return false;
     }
   },
   mounted() {
