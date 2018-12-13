@@ -13,8 +13,8 @@
             <h1>{{ pageTitle }}</h1>
           </div>
           <div id="tabs">
-                <a href="#" id="tab-id" class="tab-active" ><img src="./assets/id_selected.svg"></a>
-                <a href="#" id="tab-claim"><img src="./assets/question_unselected.svg"></a>
+                <a href="#" id="tab-id" class="tab-id-active" @click="onClickIdTab"></a>
+                <a href="#" id="tab-claim" @click="onClickClaimTab"></a>
           </div>
         </div>
     </div>
@@ -33,14 +33,26 @@ export default {
     };
   },
   components: {},
-  methods: {},
+  methods: {
+    onClickIdTab : function(e){
+      e.preventDefault();
+      console.log("Click id tab")
+    },
+
+    onClickClaimTab : function(e)
+    {
+      e.preventDefault();
+      console.log("Click claim tab")
+    }
+  },
   watch: {
-    /*
     $route() {
+      console.log(route);
+      /*
       document.getElementById("navMenu").classList.remove("is-active");
       document.getElementById("navBurger").classList.remove("is-active");
+      */
     }
-    */
   },
   mounted() {
     const sessionId = this.$route.query.session;
@@ -93,9 +105,15 @@ body {
 /* main navbar */
 
 #navbar {
+  position: absolute;
   background:#f9fafc;
   text-align: center;
   padding: 0;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  background: #ffffff;
 }
 
 #navbar-header {
@@ -163,16 +181,24 @@ div#tabs a#tab-id {
     position: absolute;
     left: 0;
     top: 0;
+    background: url('./assets/id_unselected.svg') no-repeat center center;
 }
 
 div#tabs a#tab-claim {
     position: absolute;
     right: 0;
     top: 0;
+    background: url("./assets/question_unselected.svg") no-repeat center center;
 }
 
-.tab-active {
+.tab-id-active {
     border-bottom: 2px solid #f5a523 !important;
+    background-image: url('./assets/id_selected.svg') !important;
+}
+
+.tab-claim-active {
+    border-bottom: 2px solid #f5a523 !important;
+    background-image: url('./assets/question_selected.svg') !important;
 }
 
 

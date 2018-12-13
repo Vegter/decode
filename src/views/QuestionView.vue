@@ -1,7 +1,8 @@
 <template>
   <div>
+    <!-- MN: TODO: add DEBUG VAR TO SWITCH VIEW AND HAVE DUMMY DATA -->
     <div v-if=!sessionId>
-      <create-question :base="base"></create-question>
+    <create-question :base="base"></create-question>
     </div>
     <div v-if="sessionId && !status">
       <show-q-r :base="base"></show-q-r>

@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <create-pin :base=base></create-pin>
+  <div id="onboarding-page">
+    <div id="onboading-content">
+      <h1>Building data profile</h1>
+      <h2>Please wait...</h2>
+      <img src="../assets/verification.svg"/>
+    </div>
   </div>
 </template>
 
@@ -132,3 +136,42 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+
+#onboarding-page {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  height: 100vh;
+  position: relative;
+}
+
+#onboading-content {
+  display: block;
+  margin-top: 20vh;
+}
+
+#onboading-content h1 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+#onboading-content h2 {
+  text-align: center;
+  font-weight: normal;
+  color: #555555;
+  font-size: 1em;
+}
+
+#onboading-content img {
+  display: block;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  height: auto;
+}
+
+</style>
