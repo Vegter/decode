@@ -31,7 +31,9 @@ export default {
       NAVBAR_CONFIG : {
         profile : { pageTitle: "Personal Identity", navPopup : false, section : "profile" },
         question : { pageTitle: "Question Generator", navPopup : false, section : "claim" },
-        // TODO
+        findthebox : { pageTitle: "Welcome", navPopup : false, section : "profile" },
+        onboarding : { pageTitle: "Welcome", navPopup : true, section : "profile" }, // TODO: disable backbutton?
+        // ALL OTHER ROUTES TODO
       },
       pageTitle: "Personal Identity",
       navPopup : false // true of false ( = main )
