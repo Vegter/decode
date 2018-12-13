@@ -1,24 +1,31 @@
 <template>
   <div>
-    <profile :base="base"></profile>
+    <div v-if="gotData">
+      <profile :base="base"></profile>
+    </div>
     <button class="button is-link" @click="openQrScanner()">Scan QR</button>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { getItem } from "../services/persistent_storage";
 import Profile from "../components/Profile";
+
 
 export default {
   data() {
     return {
-      picture: "../assets/logo.png",
-      surname: "Jansen",
-      firstname: "Jan",
-      dateOfBirth: "01 01 1990",
-      sex: "F",
-      nationality: "Dutch",
-      bsn: "552612991",
+      gotData: false,
+      picture: null,
+      surname: null,
+      firstname: null,
+      dateOfBirth: null,
+      sex: null,
+      nationality: null,
+      bsn: null,
+      personalData: null,
+      portraitImage: null
     };
   },
   computed: {
@@ -32,9 +39,31 @@ export default {
   methods: {
     openQrScanner() {
       this.$router.push("/scan")
+    },
+    setDataStrings(personalData, portraitImage) {
+      this.personalData = JSON.parse(this.personalData);
+
+      this.surname = this.personalData.name[0];
+      this.firstname = this.personalData.name[1];
+      this.dateOfBirth = this.personalData.date_of_birth;
+      this.sex = this.personalData.sex;
+      this.nationality = this.personalData.nationality;
+      this.bsn = this.personalData.optional_data;
+
+      this.picture = this.portraitImage;
     }
   },
-  mounted() {
-  }
+  mounted() {},
+  created() {
+    this.personalData = getItem('personal_data');
+    this.portraitImage = getItem('personal_photo');
+
+    if(this.personalData != null && this.portraitImage != null) {
+      this.gotData = true;
+      this.setDataStrings(this.personalData, this.portraitImage)
+    } else {
+
+    }
+}
 };
 </script>

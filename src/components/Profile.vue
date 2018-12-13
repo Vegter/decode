@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="base.picture" width="10%">
+    <img v-bind:src="'data:image/jpeg;base64,'+base.picture">
     <br>
     <br>
 

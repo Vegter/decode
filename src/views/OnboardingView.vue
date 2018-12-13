@@ -55,25 +55,26 @@ export default {
     },
     async startOnboarding() {
       this.zenroom("keypair");
-      console.log(this.keypair);
       const publicKey = JSON.parse(this.keypair).public;
       const response = await attachPublicKey(publicKey, this.request.id);
       joinRoom(this.request.id);
     },
     async handleEncrypedData() {
-      // debugger;
       this.session = await getRequest(this.request.id);
       this.encryptedData = this.session.response.data.encrypted;
       this.zenroom("decrypt");
     },
     handleDecrypted(value) {
-      this.decrypted = value;
-      var decryptedObj = JSON.parse(this.decrypted);
-      this.data = JSON.parse(decryptedObj.data);
-      this.image = this.data[1].image_base64;
+      const decrypted = JSON.parse(value);
+      const decryptedData = JSON.parse(decrypted.data);
+      debugger;
+      const personal_data = decryptedData[0].personal_data;
+      const portrait_image = decryptedData[1].image_base64;
 
-      setItem("personal_data", this.data[0]);
-      setItem("personal_photo", this.image);
+      setItem("personal_data", JSON.stringify(personal_data));
+      setItem("personal_photo", portrait_image);
+
+      this.$router.push("/profile");
     },
     zenroom(method) {
       window.Module = {
@@ -123,7 +124,6 @@ export default {
   },
   mounted() {
     socket.on("status_update", data => {
-      console.log(data);
       if (data.status == sessionStatus.GOT_ENCR_DATA) {
         this.handleEncrypedData();
       }
