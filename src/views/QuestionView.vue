@@ -36,11 +36,11 @@ export default {
       firstName: null,
       surname: null,
       status: null,
-      valid: null,
+      request_status: null,
       color: null,
       sessionId: null,
       url: null,
-      finished: false
+      finished: false,
     };
   },
   computed: {
@@ -79,7 +79,6 @@ export default {
 
       socket.on("status_update", data => {
         this.status = data.status;
-        debugger;
         if(this.status == "FINALIZED" && !this.finished) {
           this.getAnswer();
           this.finished = true;
@@ -87,16 +86,23 @@ export default {
       });
     },
     async getAnswer() {
-      debugger;
-      const response = await getRequest(this.sessionId);
+      var response = await getRequest(this.sessionId);
       console.log(response);
+      this.request_status = response.response.data.request_status;
+
+      if(response.response.data.secret) {
+        this.color = response.response.data.secret;
+      }
     },
     cancel() {
-      closeRoom(this.sessionId)
-      this.sessionId = null
-      this.question = null
-      this.description = null
-      this.status = null
+      closeRoom(this.sessionId);
+      this.sessionId = null;
+      this.question = null;
+      this.description = null;
+      this.status = null;
+      this.finished = false;
+      this.valid = null;
+      this.color = null;
     }
   },
   mounted() {}

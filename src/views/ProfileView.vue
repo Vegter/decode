@@ -53,18 +53,23 @@ export default {
       this.bsn = this.personalData.optional_data;
 
       this.picture = this.portraitImage;
+    },
+    checkForData() {
+      this.personalData = getItem('personal_data');
+      this.portraitImage = getItem('personal_photo');
+
+      if(this.personalData != null && this.portraitImage != null) {
+        this.gotData = true;
+        this.personalData = JSON.parse(this.personalData);
+        this.setDataStrings(this.personalData, this.portraitImage)
+      }
     }
   },
-  mounted() {},
+  mounted() {
+    this.checkForData();
+  },
   created() {
-    this.personalData = getItem('personal_data');
-    this.portraitImage = getItem('personal_photo');
-
-    if(this.personalData != null && this.portraitImage != null) {
-      this.gotData = true;
-      this.personalData = JSON.parse(this.personalData);
-      this.setDataStrings(this.personalData, this.portraitImage)
-    }
-}
+    this.checkForData();
+  }
 };
 </script>
