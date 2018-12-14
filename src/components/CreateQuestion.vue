@@ -7,7 +7,7 @@
     <h1>Select a question</h1>
     <select v-model="base.selectedQuestion">
       <option value="age">Leeftijd</option>
-      <option value="dateOfBirth">Geboortedatum</option>
+      <!-- <option value="dateOfBirth">Geboortedatum</option> -->
       <option value="name">Naam</option>
       <!-- <option value="nationality">Nationaliteit</option> -->
       <option value="sex">Geslacht</option>

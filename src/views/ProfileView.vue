@@ -1,12 +1,8 @@
 <template>
-  <div>
-    <div v-if="gotData">
-      <profile :base="base"></profile>
-    </div>
-    <div v-if="!gotData">
-      <!-- TODO: no profile component -->
-    </div>
-    <button class="button is-link" @click="openQrScanner()">Scan QR</button>
+  <div id="profile-view-content">
+    <profile :base="base"></profile>
+    <div id="verified-by"><img src="../assets/verified_by_amsterdam.svg"/></div>
+    <a class="button-verify-identity" @click="openQrScanner()"><img src="../assets/qr_scan.svg"/>Verify identity</a>
   </div>
 </template>
 
@@ -14,7 +10,6 @@
 import { mapActions, mapGetters } from "vuex";
 import { getItem } from "../services/persistent_storage";
 import Profile from "../components/Profile";
-
 
 export default {
   data() {
@@ -73,3 +68,41 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+
+#profile-view-content {
+  /* border: 1px solid black; */
+}
+
+#verified-by {
+  
+}
+
+#verified-by img {
+  display: block;
+  height: 10vh;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+a.button-verify-identity {
+  display: block;
+  background: #c60039;
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 6vh;
+  height: 7vh;
+  color: white;
+  text-align: center;
+  padding-top: 2vh;
+}
+
+a.button-verify-identity img {
+  vertical-align: top;
+  margin-right: 20px;
+}
+
+</style>

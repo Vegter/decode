@@ -16,6 +16,7 @@
 import { mapActions, mapGetters } from "vuex";
 import { createQuestion, getRequest } from "../api";
 import { socket, joinRoom, closeRoom, sessionStatus } from "../services/sockets";
+import { getItem } from "../services/persistent_storage";
 import CreateQuestion from "../components/CreateQuestion";
 import ViewAnswer from "../components/ViewAnswer";
 import ShowQR from "../components/ShowQR";
@@ -85,6 +86,7 @@ export default {
       this.sendQuestion(this.identity, this.question);
     },
     async sendQuestion(description, question) {
+      debugger;
       const response = await createQuestion(description, JSON.stringify(question));
       this.sessionId = response.session_id;
 
@@ -119,6 +121,15 @@ export default {
       this.identity = null;
     }
   },
-  mounted() {}
+  mounted() {},
+  created() {
+    var personalData = getItem('personal_data');
+
+    if(personalData != null) {
+      var personalData = JSON.parse(personalData);
+      const firstname = personalData.name[1];
+      this.identity = firstname;
+    }
+  }
 };
 </script>

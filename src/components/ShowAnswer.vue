@@ -1,7 +1,9 @@
 <template>
   <div>
-    <h2 class="subtitle">{{base.request.description}}</h2>
-    <h2 class="subtitle">{{base.request.request}}</h2>
+    <h2 class="subtitle">{{base.request.description}} asked</h2> 
+    <p>{{base.qType}}</p>
+    <p>{{base.qSubtype}}</p>
+    <p>{{base.qData}}</p>
     <br>
 
     <div v-if="base.status == 'FINALIZED'">

@@ -4,16 +4,14 @@
       <h1 class="title">Aan het wachten op antwoord...</h1>
     </div>
     <br>
-    <p>{{base.qType}}</p>
-    <p>{{base.qSubtype}}</p>
-    <p>{{base.qData}}</p>
+    <h1>{{base.question}}</h1>
     <br>
 
     <div v-if="base.status == 'FINALIZED'">
       <div v-if="base.request_status == 'VALID'" class="answer" :style="{'border-color': base.color}">
         <p>Antwoord ontvangen en valide</p>
       </div>
-      <div v-if="base.request_status == 'INVALID'" class="answer">
+      <div v-if="base.request_status == 'INVALID'" class="anwser">
         <p>Antwoord ontvangen maar invalide</p>
       </div> 
       <div v-if="base.request_status == 'DENIED'">

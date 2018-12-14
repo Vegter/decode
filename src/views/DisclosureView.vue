@@ -112,7 +112,7 @@ export default {
       } else if(request.type === "name") {
         const name = this.personalData.name;
         const firstName = name[1];
-        if(request.data.firstName === firstName) {
+        if(request.data === firstName) {
           return true;
         }
       } else if(request.type === "sex") {
@@ -165,7 +165,7 @@ export default {
     this.qData = question.data;
     
     if (question.subType) {
-      this.qSubType = question.subType;
+      this.qSubtype = question.subType;
     }
   }
 };
