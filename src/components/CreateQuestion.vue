@@ -36,12 +36,12 @@
         placeholder="Voornaam"
         v-model="base.firstName"
       >
-      <input
+      <!-- <input
         class="input"
         type="text"
         placeholder="Achternaam"
         v-model="base.surname"
-      >
+      > -->
     </div>
     <!-- Sex -->
     <div v-if="base.selectedQuestion == 'sex'">

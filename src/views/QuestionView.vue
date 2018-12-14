@@ -56,19 +56,19 @@ export default {
   methods: {
     create() {
       // TODO: take question inputs and create a session, then show QR of session ID
-      this.description = this.identity + " wil een vraag stellen";
+      this.description = this.identity;
       if(this.selectedQuestion === 'age') {
         this.question = {type: this.selectedQuestion, subType: this.selectedAgeRange, data: this.ageInput};
       } else if(this.selectedQuestion === 'dateOfBirth') {
-        this.question = {type: this.selectedQuestion, data: {day: this.dobDay, month: this.dobMonth, year: this.dobYear}};
+        const date = this.dobYear + "-" + this.dobMonth + "-" + this.dobDay;
+        this.question = {type: this.selectedQuestion, data: date};
       } else if(this.selectedQuestion === 'name') {
-        this.question = {type: this.selectedQuestion, data: {firstName: this.firstName, surname: this.surname}};
+        // this.question = {type: this.selectedQuestion, data: {firstName: this.firstName, surname: this.surname}};
+        this.question = {type: this.selectedQuestion, data: this.firstName};
       } else if(this.selectedQuestion === 'sex') {
         this.question = {type: this.selectedQuestion, data: this.selectedSex};
       }
       
-      // console.log(this.description, this.question);
-
       this.sendQuestion(this.description, this.question);
     },
     async sendQuestion(description, question) {

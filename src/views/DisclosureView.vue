@@ -21,6 +21,9 @@ export default {
   data() {
     return {
       request: null,
+      qType: null,
+      qSubtype: null,
+      qData: null,
       continued: false,
       personalData: null,
       portraitImage: null,
@@ -156,6 +159,14 @@ export default {
   },
   created() {
     this.request = this.disclosureRequest;
+    const question = JSON.parse(this.request.request);
+
+    this.qType = question.type;
+    this.qData = question.data;
+    
+    if (question.subType) {
+      this.qSubType = question.subType;
+    }
   }
 };
 </script>
