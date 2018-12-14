@@ -41,6 +41,9 @@ export default {
       sessionId: null,
       url: null,
       finished: false,
+      qType: null,
+      qSubtype: null,
+      qData: null
     };
   },
   computed: {
@@ -55,24 +58,34 @@ export default {
   },
   methods: {
     create() {
-      // TODO: take question inputs and create a session, then show QR of session ID
-      this.description = this.identity;
+      // debugger;
+      if(this.identity == null) {
+        this.identity = "Anonymous";
+      }
+
+      this.qType = this.selectedQuestion;
+      
       if(this.selectedQuestion === 'age') {
         this.question = {type: this.selectedQuestion, subType: this.selectedAgeRange, data: this.ageInput};
+        this.qSubtype = this.selectedAgeRange;
+        this.qData = this.ageInput;
       } else if(this.selectedQuestion === 'dateOfBirth') {
         const date = this.dobYear + "-" + this.dobMonth + "-" + this.dobDay;
         this.question = {type: this.selectedQuestion, data: date};
+        this.qData = date;
       } else if(this.selectedQuestion === 'name') {
         // this.question = {type: this.selectedQuestion, data: {firstName: this.firstName, surname: this.surname}};
         this.question = {type: this.selectedQuestion, data: this.firstName};
+        this.qData = this.firstName;
       } else if(this.selectedQuestion === 'sex') {
         this.question = {type: this.selectedQuestion, data: this.selectedSex};
+        this.qData = this.selectedSex;
       }
-      
-      this.sendQuestion(this.description, this.question);
+
+      this.sendQuestion(this.identity, this.question);
     },
     async sendQuestion(description, question) {
-      const response = await createQuestion(this.description, JSON.stringify(this.question));
+      const response = await createQuestion(description, JSON.stringify(question));
       this.sessionId = response.session_id;
 
       joinRoom(this.sessionId);
@@ -103,6 +116,7 @@ export default {
       this.finished = false;
       this.valid = null;
       this.color = null;
+      this.identity = null;
     }
   },
   mounted() {}

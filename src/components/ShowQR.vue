@@ -1,8 +1,13 @@
 <template>
   <div>
-    <h1 class="title">{{base.question}}</h1>
+    <!-- <h1 class="title">{{base.question}}</h1>
     <br>
     <h2 class="title">{{base.description}}</h2>
+    <br> -->
+    <p>{{base.identity}} asks</p>
+    <p>{{base.qType}}</p>
+    <p>{{base.qSubtype}}</p>
+    <p>{{base.qData}}</p>
     <br>
     
     <qrcode-vue :value="base.sessionId" :size="size" level="H"></qrcode-vue>

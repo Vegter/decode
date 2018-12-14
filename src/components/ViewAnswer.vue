@@ -4,7 +4,9 @@
       <h1 class="title">Aan het wachten op antwoord...</h1>
     </div>
     <br>
-    <h1>{{base.question}}</h1>
+    <p>{{base.qType}}</p>
+    <p>{{base.qSubtype}}</p>
+    <p>{{base.qData}}</p>
     <br>
 
     <div v-if="base.status == 'FINALIZED'">
