@@ -4,10 +4,10 @@
     <div v-if=!sessionId>
     <create-question :base="base"></create-question>
     </div>
-    <div v-if="sessionId && !status">
+    <div v-if="sessionId && !requestStarted">
       <show-q-r :base="base"></show-q-r>
     </div>
-    <div v-if=status>
+    <div v-if="requestStarted">
       <view-answer :base="base"></view-answer>
     </div>
   </div>
@@ -15,12 +15,13 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { createQuestion, getRequest } from "../api";
-import { socket, joinRoom, closeRoom, sessionStatus } from "../services/sockets";
+import { createQuestion, getRequest, getSessionStatus } from "../api";
+// import { joinRoom, closeRoom, sessionStatus } from "../services/sockets";
 import { getItem } from "../services/persistent_storage";
 import CreateQuestion from "../components/CreateQuestion";
 import ViewAnswer from "../components/ViewAnswer";
 import ShowQR from "../components/ShowQR";
+import { setTimeout } from 'timers';
 
 export default {
   data() {
@@ -43,6 +44,8 @@ export default {
       sessionId: "",
       url: "",
       finished: false,
+      continueStatusLoop: false,
+      requestStarted: false,
       qType: "",
       qSubtype: "",
       qData: ""
@@ -89,22 +92,33 @@ export default {
       const response = await createQuestion(description, JSON.stringify(question));
       this.sessionId = response.session_id;
 
-      joinRoom(this.sessionId);
-
-      console.log("FINISHED:", this.finished);
-
+      this.continueStatusLoop = true;
+      this.listenToStatus();
     },
-    listenToStatusUpdate() {
-      socket.on("status_update", data => {
-        console.log("STATUS UPDATE", "DATA:", data, "FINISHED", this.finished);
-        this.status = data.status;
-        if(this.status == "FINALIZED" && !this.finished) {
-          console.log("AFTER IF", "STATUS:", this.status, "FINISHED:", this.finished);
-          this.getAnswer();
-          this.finished = true;
+    listenToStatus() {
+      setTimeout(async () => {
+      this.status = await getSessionStatus(this.sessionId);
+      if (this.status == "STARTED") {
+        this.requestStarted = true;
+      }
+
+      if(status != "FINALIZED" && this.continueStatusLoop){
+          this.listenToStatus();
         }
-      });
+      }, 1000);
     },
+    // listenToStatusUpdate() {
+    //   // const socket = window.io.connect(process.env.VUE_SOCKET_API);
+    //   this.$socket.subscribe("status_update", data => {
+    //     console.log("STATUS UPDATE", "DATA:", data, "FINISHED", this.finished);
+    //     this.status = data.status;
+    //     if(this.status == "FINALIZED" && !this.finished) {
+    //       console.log("AFTER IF", "STATUS:", this.status, "FINISHED:", this.finished);
+    //       this.getAnswer();
+    //       this.finished = true;
+    //     }
+    //   });
+    // },
     async getAnswer() {
       var response = await getRequest(this.sessionId);
       this.request_status = response.response.data.request_status;
@@ -114,20 +128,19 @@ export default {
       }
     },
     cancel() {
-      closeRoom(this.sessionId);
       this.sessionId = null;
       this.question = null;
       this.description = null;
       this.status = null;
       this.finished = false;
+      this.continueStatusLoop = false;
+      this.requestStarted = false;
       this.valid = null;
       this.color = null;
       this.identity = null;
     }
   },
-  mounted() {
-    // this.listenToStatusUpdate();
-  },
+  mounted() {},
   created() {
     var personalData = getItem('personal_data');
 

@@ -4,6 +4,9 @@
     <br>
     <h2 class="title">{{base.description}}</h2>
     <br> -->
+    <br>
+    <br>
+    <br>
     <p>{{base.identity}} asks</p>
     <p>{{base.qType}}</p>
     <p>{{base.qSubtype}}</p>
