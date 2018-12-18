@@ -8,11 +8,11 @@ export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
-    {
+    /*{
       path: "/",
       name: "home",
       component: Home
-    },
+    },*/
     {
       path: "/about",
       name: "about",
@@ -77,7 +77,7 @@ export default new Router({
         import(/* webpackChunkName: "scan" */ "./views/ScanView.vue")
     },
     {
-      path: "/findthebox",
+      path: "/",
       name: "findthebox",
       component: () =>
         import(/* webpackChunkName: "scan" */ "./views/FindTheBoxView.vue")

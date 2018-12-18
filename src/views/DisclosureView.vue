@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <div v-if="!continued">
-      <answer-question :base="base"></answer-question>
-    </div>
-    <div v-if="continued">
-      <show-answer :base="base"></show-answer>
-    </div>
+  <div id="disclosure-page">
+      <div v-if="!continued">
+        <answer-question :base="base"></answer-question>
+      </div>
+      <div v-if="continued">
+        <show-answer :base="base"></show-answer>
+      </div>
   </div>
 </template>
 
@@ -170,3 +170,17 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+
+#disclosure-page {
+  display: block;
+  margin: 0;
+  padding: 0;
+  padding-top: 10vh;
+  border: 1px solid transparent;
+  height: 100vh;
+  position: relative;
+}
+
+</style>

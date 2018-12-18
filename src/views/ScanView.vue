@@ -32,7 +32,8 @@ export default {
       setDisclosureRequest: "setDisclosureRequest"
     }),
     return() {
-      this.$router.push("/profile");
+      //this.$router.push("/profile");
+      this.$router.go(-1); // more generic
     },
     onDecode(decodedString) {
       if(decodedString) {
