@@ -13,8 +13,8 @@
             <h1>{{ pageTitle }}</h1>
           </div>
           <div id="tabs">
-                <a href="#" id="tab-id" class="tab-active" ><img src="./assets/id_selected.svg"></a>
-                <a href="#" id="tab-claim"><img src="./assets/question_unselected.svg"></a>
+                <a href="#" id="tab-id" v-bind:class="{ 'tab-id-active' : profileIsActive }" @click="onClickIdTab"></a>
+                <a href="#" id="tab-claim" v-bind:class="{ 'tab-claim-active' : claimIsActive }" @click="onClickClaimTab"></a>
           </div>
         </div>
     </div>
@@ -28,20 +28,70 @@ export default {
   name: "Decode",
   data() {
     return {
+      NAVBAR_CONFIG : {
+        profile : { pageTitle: "Personal Identity", navPopup : false, section : "profile" },
+        question : { pageTitle: "Question Generator", navPopup : false, section : "claim" },
+        findthebox : { pageTitle: "Welcome", navPopup : false, section : "profile" },
+        onboarding : { pageTitle: "Welcome", navPopup : true, section : "profile" }, // TODO: disable backbutton?
+        // ALL OTHER ROUTES TODO
+      },
       pageTitle: "Personal Identity",
       navPopup : false // true of false ( = main )
     };
   },
-  components: {},
-  methods: {},
-  watch: {
-    /*
-    $route() {
-      document.getElementById("navMenu").classList.remove("is-active");
-      document.getElementById("navBurger").classList.remove("is-active");
-    }
-    */
+  computed : {
+    profileIsActive : function()
+    {
+      let curNavConfig = this.NAVBAR_CONFIG[ this.$route.name ];
+
+      if (curNavConfig){
+        if (this.NAVBAR_CONFIG[ this.$route.name ].section == "profile"){
+          return true;}
+      }
+      return false
+    },
+    
+    claimIsActive : function()
+    {
+      let curNavConfig = this.NAVBAR_CONFIG[ this.$route.name ];
+
+      if (curNavConfig){
+        if (this.NAVBAR_CONFIG[ this.$route.name ].section == "claim"){
+          return true;}
+      }
+      return false
+    },    
+
   },
+  components: {},
+  
+  methods: {
+    onClickIdTab : function(e){
+      e.preventDefault();
+      console.log("Click id tab")
+      this.$router.push({ path: "profile", query: { } });
+    },
+
+    onClickClaimTab : function(e)
+    {
+      e.preventDefault();
+      console.log("Click claim tab")
+      this.$router.push({ path: "question", query: { } });
+    },
+
+  },
+  
+  watch: {
+    $route() {
+      console.log(this.$route);
+      // make sure the navbar is in the right state
+      let curNavBarConfig = this.NAVBAR_CONFIG[ this.$route.name ];
+
+      this.pageTitle = curNavBarConfig.pageTitle;
+      this.navPopup = curNavBarConfig.navPopup;
+    }
+  },
+
   mounted() {
     const sessionId = this.$route.query.session;
     if (sessionId) {
@@ -93,9 +143,15 @@ body {
 /* main navbar */
 
 #navbar {
+  position: absolute;
   background:#f9fafc;
   text-align: center;
   padding: 0;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  background: #ffffff;
 }
 
 #navbar-header {
@@ -163,16 +219,24 @@ div#tabs a#tab-id {
     position: absolute;
     left: 0;
     top: 0;
+    background: url('./assets/id_unselected.svg') no-repeat center center;
 }
 
 div#tabs a#tab-claim {
     position: absolute;
     right: 0;
     top: 0;
+    background: url("./assets/question_unselected.svg") no-repeat center center;
 }
 
-.tab-active {
+.tab-id-active {
     border-bottom: 2px solid #f5a523 !important;
+    background-image: url('./assets/id_selected.svg') !important;
+}
+
+.tab-claim-active {
+    border-bottom: 2px solid #f5a523 !important;
+    background-image: url('./assets/question_selected.svg') !important;
 }
 
 

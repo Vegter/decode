@@ -75,6 +75,12 @@ export default new Router({
       name: "scan",
       component: () =>
         import(/* webpackChunkName: "scan" */ "./views/ScanView.vue")
+    },
+    {
+      path: "/findthebox",
+      name: "findthebox",
+      component: () =>
+        import(/* webpackChunkName: "scan" */ "./views/FindTheBoxView.vue")
     }
   ]
 });

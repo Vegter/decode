@@ -1,7 +1,7 @@
 <template>
   <div>
     <qrcode-reader @decode="base.onDecode"></qrcode-reader>
-    <button class="button is-link" @click="base.return()">Terug</button>
+    <!-- <button class="button is-link" @click="base.return()">Terug</button> TO ScanView --> 
   </div>
 </template>
 
