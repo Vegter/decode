@@ -16,6 +16,7 @@
         <p>YOU DENIED</p>
       </div>
     </div>
+    
     <div>
       <button class="button is-link" @click="base.return()">Back</button>
     </div>
@@ -25,7 +26,24 @@
 <script>
 export default {
   name: "ShowAnswer",
-  props: ["base"]
+  props: ["base"],
+  data()
+  {
+      return {
+        DEBUG : false,
+      }
+  },
+  mounted : function()
+  {
+    // debug start
+    if (this.DEBUG){
+      // hack value of property
+      this.base = {
+          status : 'FINALIZED',
+          request_status: 'VALID',
+      }
+    }
+  },
 };
 </script>
 
