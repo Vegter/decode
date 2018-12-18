@@ -95,12 +95,11 @@ export default {
 
     },
     listenToStatusUpdate() {
-      console.log("PRE 'on: status_update'");
       socket.on("status_update", data => {
-        console.log("PRE", data, this.finished);
+        console.log("STATUS UPDATE", "DATA:", data, "FINISHED", this.finished);
         this.status = data.status;
         if(this.status == "FINALIZED" && !this.finished) {
-          console.log("AFTER IF", this.status, this.finished);
+          console.log("AFTER IF", "STATUS:", this.status, "FINISHED:", this.finished);
           this.getAnswer();
           this.finished = true;
         }
@@ -126,7 +125,9 @@ export default {
       this.identity = null;
     }
   },
-  mounted() {},
+  mounted() {
+    // this.listenToStatusUpdate();
+  },
   created() {
     var personalData = getItem('personal_data');
 
@@ -135,8 +136,6 @@ export default {
       const firstname = personalData.name[1];
       this.identity = firstname;
     }
-
-    this.listenToStatusUpdate();
   }
 };
 </script>

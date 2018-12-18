@@ -71,7 +71,7 @@ export default {
   display: block;
   position: absolute;
   height: 80px;
-  bottom: 0;
+  bottom: 0;question
   width: 100%;
 }
 
