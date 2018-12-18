@@ -10,14 +10,15 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getRequest, attachPublicKey } from "../api";
-import { socket, joinRoom, sessionStatus } from "../services/sockets";
+import { getRequest, attachPublicKey, getSessionStatus } from "../api";
+// import { socket, joinRoom, sessionStatus } from "../services/sockets";
 import { setItem } from "../services/persistent_storage";
 // import zenroom from 'zenroom';
 import sha512 from "js-sha512";
 import _keygen from "raw-loader!../zenroom/keygen.lua";
 import _decrypt from "raw-loader!../zenroom/decrypt_message.lua";
 import CreatePin from "../components/CreatePin.vue";
+import { setTimeout, clearTimeout } from 'timers';
 // import { join } from "path";
 
 export default {
@@ -27,7 +28,9 @@ export default {
       firstHash: null,
       checkPin: false,
       keypair: null,
-      result: null
+      result: null,
+      loop: null,
+      status: null
     };
   },
   computed: {
@@ -61,7 +64,9 @@ export default {
       this.zenroom("keypair");
       const publicKey = JSON.parse(this.keypair).public;
       await attachPublicKey(publicKey, this.request.id);
-      joinRoom(this.request.id);
+
+      this.checkStatus();
+      // joinRoom(this.request.id);
     },
     async handleEncrypedData() {
       this.session = await getRequest(this.request.id);
@@ -78,6 +83,18 @@ export default {
       setItem("personal_photo", portrait_image);
 
       this.$router.push("/profile");
+    },
+    checkStatus() {
+      this.loop = setTimeout(() => this.getStatus(), 1000);
+    },
+    async getStatus() {
+      var response = await getSessionStatus(this.request.id);
+      console.log(response.response);
+      if(response.response == "GOT_ENCR_DATA") {
+        this.handleEncrypedData();
+        clearTimeout(this.loop);
+        return true;
+      }
     },
     zenroom(method) {
       window.Module = {
@@ -126,11 +143,6 @@ export default {
     }
   },
   mounted() {
-    socket.on("status_update", data => {
-      if (data.status == sessionStatus.GOT_ENCR_DATA) {
-        this.handleEncrypedData();
-      }
-    });
   },
   created() {
     if(this.onboardingRequest) {

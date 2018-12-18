@@ -10,19 +10,19 @@
         <div class="section">
           <h1>Select a question</h1>
           <select v-model="base.selectedQuestion">
-            <option value="age">Leeftijd</option>
-            <option value="dateOfBirth">Geboortedatum</option>
-            <option value="name">Naam</option>
+            <option value="age">Age</option>
+            <!-- <option value="dateOfBirth">Date</option> -->
+            <option value="name">Name</option>
             <!-- <option value="nationality">Nationaliteit</option> -->
-            <option value="sex">Geslacht</option>
+            <option value="sex">Sex</option>
           </select>
           <h1>Choose a logic</h1>
           <!-- Age -->
           <div v-if="base.selectedQuestion == 'age'">
             <select v-model="base.selectedAgeRange">
-              <option value="equalOrGreater">Gelijk of hoger dan</option>
-              <option value="lesser">Lager dan</option>
-              <option value="equal">Gelijk aan</option>
+              <option value="equalOrGreater">Equal or greater then</option>
+              <option value="lesser">Lower then</option>
+              <option value="equal">Equal to</option>
             </select>
             <h1>The age:</h1>
             <input class="input" type="number" placeholder="Age" v-model="base.ageInput">
@@ -41,19 +41,19 @@
               placeholder="Voornaam"
               v-model="base.firstName"
             >
-            <input
+            <!-- <input
               class="input"
               type="text"
               placeholder="Achternaam"
               v-model="base.surname"
-            >
+            > -->
           </div>
           <!-- Sex -->
           <div v-if="base.selectedQuestion == 'sex'">
             <select v-model="base.selectedSex">
-              <option value="female">Vrouw</option>
-              <option value="male">Man</option>
-              <option value="other">Overig</option>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+              <option value="other">Other</option>
             </select>
           </div>
         </div>

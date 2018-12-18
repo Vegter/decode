@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { getItem } from "../services/persistent_storage";
 
 export default {
   data() {
@@ -19,13 +20,15 @@ export default {
      
     };
   },
-  computed: {
-  },
-  components: {
+  beforeCreate() {
+    var personal_data = getItem('personal_data');
+    if(personal_data != null) {
+      this.$router.push("/profile");
+    }
   },
   methods: {
       openQrScanner() {
-        this.$router.push("/scan")
+        this.$router.push("/scan");
       },
   }
 };

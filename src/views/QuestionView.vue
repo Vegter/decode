@@ -107,18 +107,6 @@ export default {
         }
       }, 1000);
     },
-    // listenToStatusUpdate() {
-    //   // const socket = window.io.connect(process.env.VUE_SOCKET_API);
-    //   this.$socket.subscribe("status_update", data => {
-    //     console.log("STATUS UPDATE", "DATA:", data, "FINISHED", this.finished);
-    //     this.status = data.status;
-    //     if(this.status == "FINALIZED" && !this.finished) {
-    //       console.log("AFTER IF", "STATUS:", this.status, "FINISHED:", this.finished);
-    //       this.getAnswer();
-    //       this.finished = true;
-    //     }
-    //   });
-    // },
     async getAnswer() {
       var response = await getRequest(this.sessionId);
       this.request_status = response.response.data.request_status;
