@@ -24,27 +24,27 @@ import ShowQR from "../components/ShowQR";
 export default {
   data() {
     return {
-      identity: null,
-      question: null,
-      description: null,
+      identity: "",
+      question: {},
+      description: "",
       selectedQuestion: "name",
       selectedAgeRange: "equalOrGreater",
       selectedSex: "female",
       ageInput: 18,
-      dobDay: null,
-      dobMonth: null,
-      dobYear: null,
-      firstName: null,
-      surname: null,
-      status: null,
-      request_status: null,
-      color: null,
-      sessionId: null,
-      url: null,
+      dobDay: 1,
+      dobMonth: 1,
+      dobYear: 2000,
+      firstName: "",
+      surname: "",
+      status: "",
+      request_status: "",
+      color: "",
+      sessionId: "",
+      url: "",
       finished: false,
-      qType: null,
-      qSubtype: null,
-      qData: null
+      qType: "",
+      qSubtype: "",
+      qData: ""
     };
   },
   computed: {
@@ -59,8 +59,7 @@ export default {
   },
   methods: {
     create() {
-      // debugger;
-      if(this.identity == null) {
+      if(this.identity == "") {
         this.identity = "Anonymous";
       }
 
@@ -86,15 +85,21 @@ export default {
       this.sendQuestion(this.identity, this.question);
     },
     async sendQuestion(description, question) {
-      debugger;
       const response = await createQuestion(description, JSON.stringify(question));
       this.sessionId = response.session_id;
 
       joinRoom(this.sessionId);
 
+      console.log("FINISHED:", this.finished);
+
+    },
+    listenToStatusUpdate() {
+      console.log("PRE 'on: status_update'");
       socket.on("status_update", data => {
+        console.log("PRE", data, this.finished);
         this.status = data.status;
         if(this.status == "FINALIZED" && !this.finished) {
+          console.log("AFTER IF", this.status, this.finished);
           this.getAnswer();
           this.finished = true;
         }
@@ -102,7 +107,6 @@ export default {
     },
     async getAnswer() {
       var response = await getRequest(this.sessionId);
-      console.log(response);
       this.request_status = response.response.data.request_status;
 
       if(response.response.data.secret) {
@@ -130,6 +134,8 @@ export default {
       const firstname = personalData.name[1];
       this.identity = firstname;
     }
+
+    this.listenToStatusUpdate();
   }
 };
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <create-pin :base=base></create-pin>
+    <p>Getting onboard...</p>
+    <!-- <create-pin :base=base></create-pin> -->
   </div>
 </template>
 
@@ -37,7 +38,7 @@ export default {
   },
   methods: {
     firstPin(/*code*/) {
-      this.startOnboarding();
+      // this.startOnboarding();
 
       // this.firstHash = sha512.update(code);
       // console.log(this.firstHash.hex())
@@ -127,12 +128,12 @@ export default {
         this.handleEncrypedData();
       }
     });
-
-    // const zencode = `print("hello world from zenroom in nodejs")`;
-    // zenroom.zencode(zencode).exec()
   },
   created() {
-    this.request = this.onboardingRequest;
+    if(this.onboardingRequest) {
+      this.request = this.onboardingRequest;
+      this.startOnboarding();
+    }
   }
 };
 </script>

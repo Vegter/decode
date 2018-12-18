@@ -76,7 +76,7 @@ export default {
 }
 
 #verified-by {
-  
+  padding-bottom: 20px;
 }
 
 #verified-by img {
