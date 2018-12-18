@@ -1,9 +1,7 @@
 <template>
-  <div>
-    <h2 class="subtitle">{{base.request.description}} asked</h2> 
-    <p>{{base.qType}}</p>
-    <p>{{base.qSubtype}}</p>
-    <p>{{base.qData}}</p>
+  <div id="show-answer-content">
+    <h1>{{base.request.description}} asked</h1>
+    <h2><span id="question-attribute">{{base.qType }}</span><span id="question-logic">{{base.qSubtype}}</span> <span id="question-value">{{base.qData}}</span></h2>
     <br>
 
     <div v-if="base.status == 'FINALIZED'">
@@ -32,6 +30,12 @@ export default {
 </script>
 
 <style>
+
+#show-answer-content {
+  text-align: center;
+  margin-top: 5vh;
+}
+
 .picture {
   border-style: solid;
   border-width: thick;
@@ -48,4 +52,24 @@ export default {
 .isNotOK {
   color: red;
 }
+
+h1 { 
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+h2 { 
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+h3 { 
+  font-size: 1.0em;
+  font-weight: normal;
+}
+
+h2 span {
+  margin-right: 10px;
+}
+
 </style>

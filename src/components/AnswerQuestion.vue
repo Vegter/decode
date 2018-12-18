@@ -16,7 +16,7 @@ export default {
   props: ["base"],
   data() {
     return {
-        DEBUG: true,
+        DEBUG: false, // !!!!
         DEBUG_VARS : {
           qType : "Age",
           qSubtype : ">", 
@@ -91,7 +91,7 @@ h2 span {
   margin-top: 20px;
   border-radius: 6vh;
   height: 7vh;
-  color: black;
+  color: #c60039;
   text-align: center;
   background: white;
 }
