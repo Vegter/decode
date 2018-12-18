@@ -7,7 +7,7 @@
     </div>
     <div id="findthebox-footer">
         <a class="button-scan-onboarding-code" @click="openQrScanner()"><img src="../assets/qr_scan.svg"/>Scan Onboarding Code</a>
-  </div>
+    </div>
   </div>
 </template>
 
@@ -24,6 +24,9 @@ export default {
   components: {
   },
   methods: {
+      openQrScanner() {
+        this.$router.push("/scan")
+      },
   }
 };
 
@@ -71,7 +74,7 @@ export default {
   display: block;
   position: absolute;
   height: 80px;
-  bottom: 0;question
+  bottom: 0;
   width: 100%;
 }
 

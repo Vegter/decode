@@ -1,19 +1,11 @@
 <template>
-  <div>
-    <h1 class="title">Beantwoord vraag</h1>
-    <br>
-    <!-- <h2 class="subtitle">{{base.request.description}}</h2>
-    <h2 class="subtitle">{{base.request.request}}</h2>
-    <br> -->
-    <p>{{base.request.description}} asks</p>
-    <p>{{base.qType}}</p>
-    <p>{{base.qSubtype}}</p>
-    <p>{{base.qData}}</p>
-    <br>
-    <div>
-      <button class="button is-link" @click="base.acceptQuestion()">OK</button>
-      &nbsp;
-      <button class="button is-danger" @click="base.denyQuestion()">Weiger</button>
+  <div id="question-content">
+    <h1>{{base.request.description}} asks</h1>
+    <h2><span id="question-attribute">{{base.qType }}</span><span id="question-logic">{{base.qSubtype}}</span> <span id="question-value">{{base.qData}}</span></h2>
+    <h3>Do you want to share this information?</h3>
+    <div id="answer-buttons">
+      <button class="button-yes" @click="base.acceptQuestion()">Yes</button>
+      <button class="button-no" @click="base.denyQuestion()">No</button>
     </div>
   </div>
 </template>
@@ -23,10 +15,85 @@ export default {
   name: "AnswerQuestion",
   props: ["base"],
   data() {
-    return {};
+    return {
+        DEBUG: true,
+        DEBUG_VARS : {
+          qType : "Age",
+          qSubtype : ">", 
+          qData : "18",
+          request : {
+            description: "Test Requester"
+          },
+        }
+
+    };
   },
+  mounted : function(){
+    // setup debug vars if needed ( this is HACKY )
+    if (this.DEBUG){
+      this.base = this.DEBUG_VARS;
+    }
+  }
 };
 </script>
 
 <style scoped>
+
+#question-content {
+  text-align: center;
+  margin-top: 5vh;
+}
+
+h1 { 
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+h2 { 
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+h3 { 
+  font-size: 1.0em;
+  font-weight: normal;
+}
+
+h2 span {
+  margin-right: 10px;
+}
+
+#answer-buttons {
+  margin-top: 40px;
+}
+
+.button-yes {
+  display: block;
+  background: #c60039;
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0;
+  border-radius: 6vh;
+  height: 7vh;
+  color: white;
+  text-align: center;
+  font-size: 1em;
+  font-weight: normal;
+}
+
+.button-no {
+  display: block;
+  border: 2px solid #c60039;
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  border-radius: 6vh;
+  height: 7vh;
+  color: black;
+  text-align: center;
+  background: white;
+}
+
 </style>

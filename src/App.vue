@@ -4,7 +4,7 @@
     <div id="navbar">
         <div v-if="navPopup" id="popup">
           <div id="navbar-header">
-            <a href="#" class="back-button"><img src="./assets/arrow_back.svg"></a>
+            <a v-if="navPopupBackButton" href="#" class="back-button"><img src="./assets/arrow_back.svg"></a>
             <h1>{{ pageTitle }}</h1>
           </div>
         </div>
@@ -31,12 +31,15 @@ export default {
       NAVBAR_CONFIG : {
         profile : { pageTitle: "Personal Identity", navPopup : false, section : "profile" },
         question : { pageTitle: "Question Generator", navPopup : false, section : "claim" },
-        findthebox : { pageTitle: "Welcome", navPopup : false, section : "profile" },
-        onboarding : { pageTitle: "Welcome", navPopup : true, section : "profile" }, // TODO: disable backbutton?
+        findthebox : { pageTitle: "Welcome", navPopup : true, navPopupBackButton: false },
+        onboarding : { pageTitle: "Welcome", navPopup : true, navPopupBackButton: false },
+        scan : { pageTitle: "Scan QR Code", navPopup : true, navPopupBackButton: false },
+        disclosure : { pageTitle: "Disclosure", navPopup : true, navPopupBackButton: true },
         // ALL OTHER ROUTES TODO
       },
       pageTitle: "Personal Identity",
-      navPopup : false // true of false ( = main )
+      navPopup : false,  // true of false ( = main )
+      navPopupBackButton: true, // popup has backbutton
     };
   },
   computed : {
@@ -68,14 +71,12 @@ export default {
   methods: {
     onClickIdTab : function(e){
       e.preventDefault();
-      console.log("Click id tab")
       this.$router.push({ path: "profile", query: { } });
     },
 
     onClickClaimTab : function(e)
     {
       e.preventDefault();
-      console.log("Click claim tab")
       this.$router.push({ path: "question", query: { } });
     },
 
@@ -87,8 +88,14 @@ export default {
       // make sure the navbar is in the right state
       let curNavBarConfig = this.NAVBAR_CONFIG[ this.$route.name ];
 
+      if (curNavBarConfig == null){
+        console.log("No NAVBAR_CONFIG for route:" + this.$route.name );
+        return false;
+      }
+
       this.pageTitle = curNavBarConfig.pageTitle;
       this.navPopup = curNavBarConfig.navPopup;
+      this.navPopupBackButton = curNavBarConfig.navPopupBackButton;
     }
   },
 
