@@ -143,6 +143,12 @@ export default {
     }
   },
   mounted() {
+    // socket.on("status_update", data => {
+    //   console.log(data);
+    //   if (data.status == sessionStatus.GOT_ENCR_DATA) {
+    //     this.handleEncrypedData();
+    //   }
+    // });
   },
   created() {
     if(this.onboardingRequest) {

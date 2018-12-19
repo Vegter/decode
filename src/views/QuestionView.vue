@@ -1,13 +1,13 @@
 <template>
   <div>
     <!-- MN: TODO: add DEBUG VAR TO SWITCH VIEW AND HAVE DUMMY DATA -->
-    <div v-if=!sessionId>
+    <div v-if="stage == 'QUESTION'">
     <create-question :base="base"></create-question>
     </div>
-    <div v-if="sessionId && !requestStarted">
+    <div v-if="stage == 'QRCODE'">
       <show-q-r :base="base"></show-q-r>
     </div>
-    <div v-if="requestStarted">
+    <div v-if="stage == 'ANSWER'">
       <view-answer :base="base"></view-answer>
     </div>
   </div>
@@ -16,12 +16,12 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { createQuestion, getRequest, getSessionStatus } from "../api";
-// import { joinRoom, closeRoom, sessionStatus } from "../services/sockets";
 import { getItem } from "../services/persistent_storage";
 import CreateQuestion from "../components/CreateQuestion";
 import ViewAnswer from "../components/ViewAnswer";
 import ShowQR from "../components/ShowQR";
-import { setTimeout } from 'timers';
+import { setInterval, clearInterval } from 'timers';
+
 
 export default {
   data() {
@@ -36,19 +36,18 @@ export default {
       dobDay: 1,
       dobMonth: 1,
       dobYear: 2000,
-      firstName: "",
+      firstName: "Mark",
       surname: "",
       status: "",
       request_status: "",
       color: "",
       sessionId: "",
       url: "",
-      finished: false,
-      continueStatusLoop: false,
-      requestStarted: false,
       qType: "",
       qSubtype: "",
-      qData: ""
+      qData: "",
+      statusInterval: null,
+      stage: "" // QUESTION, QRCODE or ANSWER
     };
   },
   computed: {
@@ -91,19 +90,22 @@ export default {
     async sendQuestion(description, question) {
       const response = await createQuestion(description, JSON.stringify(question));
       this.sessionId = response.session_id;
-
-      this.continueStatusLoop = true;
+      
+      this.stage = "QRCODE"
       this.listenToStatus();
     },
+    // REST CALL LOOP
     listenToStatus() {
-      setTimeout(async () => {
-      this.status = await getSessionStatus(this.sessionId);
-      if (this.status == "STARTED") {
-        this.requestStarted = true;
-      }
-
-      if(status != "FINALIZED" && this.continueStatusLoop){
-          this.listenToStatus();
+      this.statusInterval = setInterval(async () => {
+        var response = await getSessionStatus(this.sessionId);
+        this.status = response.response;
+        console.log(this.status);
+        if(this.status == "STARTED") {
+          this.stage = "ANSWER"
+        }
+        if(this.status == "FINALIZED") {
+          clearInterval(this.statusInterval);
+          this.getAnswer();
         }
       }, 1000);
     },
@@ -111,32 +113,34 @@ export default {
       var response = await getRequest(this.sessionId);
       this.request_status = response.response.data.request_status;
 
-      if(response.response.data.secret) {
+      if (response.response.data.secret) {
         this.color = response.response.data.secret;
       }
     },
     cancel() {
+      clearInterval(this.statusInterval);
+      this.stage = "QUESTION"
       this.sessionId = null;
       this.question = null;
       this.description = null;
       this.status = null;
-      this.finished = false;
-      this.continueStatusLoop = false;
-      this.requestStarted = false;
       this.valid = null;
       this.color = null;
       this.identity = null;
     }
   },
-  mounted() {},
   created() {
-    var personalData = getItem('personal_data');
+    this.stage = "QUESTION";
+    var personalData = getItem("personal_data");
 
-    if(personalData != null) {
-      var personalData = JSON.parse(personalData);
+    if (personalData != null) {
+      personalData = JSON.parse(personalData);
       const firstname = personalData.name[1];
       this.identity = firstname;
     }
+  },
+  destroyed() {
+    clearInterval(this.statusInterval);
   }
 };
 </script>
