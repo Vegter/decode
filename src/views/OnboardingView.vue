@@ -11,15 +11,12 @@
 <script>
 import { mapGetters } from "vuex";
 import { getRequest, attachPublicKey, getSessionStatus } from "../api";
-// import { socket, joinRoom, sessionStatus } from "../services/sockets";
 import { setItem } from "../services/persistent_storage";
-// import zenroom from 'zenroom';
 import sha512 from "js-sha512";
 import _keygen from "raw-loader!../zenroom/keygen.lua";
 import _decrypt from "raw-loader!../zenroom/decrypt_message.lua";
 import CreatePin from "../components/CreatePin.vue";
-import { setTimeout, clearTimeout } from 'timers';
-// import { join } from "path";
+import { setInterval, clearInterval } from 'timers';
 
 export default {
   data() {
@@ -30,7 +27,8 @@ export default {
       keypair: null,
       result: null,
       loop: null,
-      status: null
+      status: null,
+      statusInterval: null
     };
   },
   computed: {
@@ -65,8 +63,7 @@ export default {
       const publicKey = JSON.parse(this.keypair).public;
       await attachPublicKey(publicKey, this.request.id);
 
-      this.checkStatus();
-      // joinRoom(this.request.id);
+      this.listenToStatus();
     },
     async handleEncrypedData() {
       this.session = await getRequest(this.request.id);
@@ -84,18 +81,29 @@ export default {
 
       this.$router.push("/profile");
     },
-    checkStatus() {
-      this.loop = setTimeout(() => this.getStatus(), 1000);
+    listenToStatus() {
+      this.statusInterval = setInterval(async () => {
+        var response = await getSessionStatus(this.request.id);
+        this.status = response.response;
+        console.log(this.status);
+        if (this.status == "GOT_ENCR_DATA") {
+          this.handleEncrypedData();
+          clearInterval(this.statusInterval);
+        }
+      }, 1000);
     },
-    async getStatus() {
-      var response = await getSessionStatus(this.request.id);
-      console.log(response.response);
-      if(response.response == "GOT_ENCR_DATA") {
-        this.handleEncrypedData();
-        clearTimeout(this.loop);
-        return true;
-      }
-    },
+    // checkStatus() {
+    //   this.loop = setTimeout(() => this.getStatus(), 1000);
+    // },
+    // async getStatus() {
+    //   var response = await getSessionStatus(this.request.id);
+    //   console.log(response.response);
+    //   if(response.response == "GOT_ENCR_DATA") {
+    //     this.handleEncrypedData();
+    //     clearTimeout(this.loop);
+    //     return true;
+    //   }
+    // },
     zenroom(method) {
       window.Module = {
         ...window.Module,
@@ -143,18 +151,15 @@ export default {
     }
   },
   mounted() {
-    // socket.on("status_update", data => {
-    //   console.log(data);
-    //   if (data.status == sessionStatus.GOT_ENCR_DATA) {
-    //     this.handleEncrypedData();
-    //   }
-    // });
   },
   created() {
     if(this.onboardingRequest) {
       this.request = this.onboardingRequest;
       this.startOnboarding();
     }
+  },
+  destroyed() {
+    clearInterval(this.statusInterval);
   }
 };
 </script>
