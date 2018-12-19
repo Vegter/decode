@@ -2,7 +2,7 @@
   <div id="onboarding-page">
     <div id="onboading-content">
       <h1>Building data profile</h1>
-      <h2>Please wait...</h2>
+      <h2>Please wait... #</h2>
       <img src="../assets/verification.svg"/>
     </div>
   </div>
@@ -85,25 +85,13 @@ export default {
       this.statusInterval = setInterval(async () => {
         var response = await getSessionStatus(this.request.id);
         this.status = response.response;
-        console.log(this.status);
+        console.log(this.status)
         if (this.status == "GOT_ENCR_DATA") {
           this.handleEncrypedData();
           clearInterval(this.statusInterval);
         }
       }, 1000);
     },
-    // checkStatus() {
-    //   this.loop = setTimeout(() => this.getStatus(), 1000);
-    // },
-    // async getStatus() {
-    //   var response = await getSessionStatus(this.request.id);
-    //   console.log(response.response);
-    //   if(response.response == "GOT_ENCR_DATA") {
-    //     this.handleEncrypedData();
-    //     clearTimeout(this.loop);
-    //     return true;
-    //   }
-    // },
     zenroom(method) {
       window.Module = {
         ...window.Module,

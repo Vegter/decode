@@ -36,6 +36,7 @@ export default {
       this.$router.go(-1); // more generic
     },
     onDecode(decodedString) {
+      
       if(decodedString) {
         this.sessionId = decodedString;
         this.handleSessionId(this.sessionId);

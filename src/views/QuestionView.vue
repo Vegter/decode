@@ -99,7 +99,6 @@ export default {
       this.statusInterval = setInterval(async () => {
         var response = await getSessionStatus(this.sessionId);
         this.status = response.response;
-        console.log(this.status);
         if(this.status == "STARTED") {
           this.stage = "ANSWER"
         }
