@@ -1,11 +1,16 @@
 <template>
   <div id="disclosure-page">
-      <div v-if="!continued">
+      <!-- <div v-if="!continued">
         <answer-question :base="base"></answer-question>
       </div>
       <div v-if="continued">
         <show-answer :base="base"></show-answer>
-      </div>
+      </div> -->
+
+      <!-- DEBUG COMPONENTS -->
+      <!-- <answer-question :base="debugBase"></answer-question> -->
+      <show-answer :base="debugBase"></show-answer>
+
   </div>
 </template>
 
@@ -13,17 +18,17 @@
 import { mapActions, mapGetters } from "vuex";
 import { denyRequest, acceptRequest } from "../api";
 import { getItem } from "../services/persistent_storage";
+import { parseRequest } from "../services/request_parser";
 import AnswerQuestion from "../components/AnswerQuestion";
 import ShowAnswer from "../components/ShowAnswer";
 import EnterPin from "../components/EnterPin";
+import debugImage from "../assets/portrait_image";
 
 export default {
   data() {
     return {
       request: null,
-      qType: null,
-      qSubtype: null,
-      qData: null,
+      prettyRequest: {},
       continued: false,
       personalData: null,
       portraitImage: null,
@@ -36,6 +41,14 @@ export default {
     ...mapGetters(["disclosureRequest"]),
     base() {
       return this;
+    },
+    debugBase() {
+      return {
+        prettyRequest: {identity: "John Doe", type: 'Name', subType: 'is', data: 'Mark'},
+        request_status: "VALID", // "VALID, INVALID, DENIED"
+        color: "rgb(255, 0, 0)",
+        portraitImage: debugImage.image
+      }
     }
   },
   components: {
@@ -48,7 +61,7 @@ export default {
     async acceptQuestion() {
       // 1. verify request with local storage
       const requestValid = this.validateRequest();
-      if(requestValid) {
+      if (requestValid) {
         var requestStatus = "VALID";
       } else {
         var requestStatus = "INVALID";
@@ -57,16 +70,6 @@ export default {
       const response = await acceptRequest(this.request.id, requestStatus);
       console.log(response);
       this.handleResponse(response.response);
-      // console.log(response);
-      // this.status = response.response.status;
-
-      // this.continued = true;
-      // this.request_status = response.response.data.request_status;
-
-      // if(response.response.data.secret) {
-      //   this.color = response.response.data.secret;
-      //   this.portraitImage = getItem('personal_photo');
-      // }
     },
     handleResponse(response) {
       this.status = response.status;
@@ -78,7 +81,7 @@ export default {
       this.continued = true;
       this.request_status = response.data.request_status;
 
-      if(response.data.secret) {
+      if (response.data.secret) {
         this.color = response.data.secret;
         this.portraitImage = getItem('personal_photo');
       }
@@ -102,20 +105,20 @@ export default {
         const checkAge = parseInt(request.data);
         if (request.subType === "equal" && age === checkAge) {
           return true;
-        } else if(request.subType === "equalOrGreater" && age >= checkAge) {
+        } else if (request.subType === "equalOrGreater" && age >= checkAge) {
           return true;
-        } else if(request.status === "lesser" && age < checkAge) {
+        } else if (request.status === "lesser" && age < checkAge) {
           return true;
         } else {
           return false;
         }
-      } else if(request.type === "name") {
+      } else if (request.type === "name") {
         const name = this.personalData.name;
         const firstName = name[1];
-        if(request.data === firstName) {
+        if (request.data === firstName) {
           return true;
         }
-      } else if(request.type === "sex") {
+      } else if (request.type === "sex") {
         const sex = this.personalData.sex;
         if (request.data === "female" && (sex === "F" || sex === "V")) {
           return true;
@@ -153,20 +156,12 @@ export default {
       this.$router.push("/profile")
     }
   },
-  mounted() {
-    //   this.request = this.disclosureRequest;
-    //   console.log(this.request);
-  },
   created() {
     this.request = this.disclosureRequest;
-    const question = JSON.parse(this.request.request);
-
-    this.qType = question.type;
-    this.qData = question.data;
-    
-    if (question.subType) {
-      this.qSubtype = question.subType;
-    }
+    const identity = this.request.description;
+    const question = JSON.parse(this.request.request)
+    // debugger;
+    this.prettyRequest = parseRequest(identity, question);
   }
 };
 </script>

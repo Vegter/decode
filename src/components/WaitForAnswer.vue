@@ -4,19 +4,11 @@
     <br>
     <br>
     <br>
+    <h1 class="title">Aan het wachten op antwoord...</h1>
     <br>
     <p>{{base.request.identity}} asks</p>
     <p>{{base.request.type}} {{base.request.subType}} {{base.request.data}}</p>
     <br>
-    <div v-if="base.request_status == 'VALID'" class="answer" :style="{'border-color': base.color}">
-      <p>Antwoord ontvangen en valide</p>
-    </div>
-    <div v-if="base.request_status == 'INVALID'" class="anwser">
-      <p>Antwoord ontvangen maar invalide</p>
-    </div> 
-    <div v-if="base.request_status == 'DENIED'">
-      <p>Vraag is geweigerd</p>
-    </div>
     <br>
     <div>
       <button class="button is-link" @click="base.cancel()">Annuleren</button>
@@ -26,7 +18,7 @@
 
 <script>
 export default {
-  name: "ViewAnswer",
+  name: "WaitForAnswer",
   props: ["base"]
 };
 </script>

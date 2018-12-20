@@ -141,7 +141,7 @@ export default {
   mounted() {
   },
   created() {
-    if(this.onboardingRequest) {
+    if (this.onboardingRequest) {
       this.request = this.onboardingRequest;
       this.startOnboarding();
     }

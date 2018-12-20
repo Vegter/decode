@@ -35,7 +35,7 @@ import { mapActions, mapGetters } from "vuex";
 import { getSession, getSessionStatus, getFullSession } from "../api";
 import ScanQuestion from "../components/ScanQuestion";
 import ShowResponse from "../components/ShowResponse";
-import WaitForAnswer from "../components/waitForAnswer";
+// import WaitForAnswer from "../components/waitForAnswer";
 import ViewAnswer from "../components/ViewAnswer"
 
 var status_requestor = null;

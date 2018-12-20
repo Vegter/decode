@@ -37,14 +37,14 @@ export default {
     },
     onDecode(decodedString) {
       
-      if(decodedString) {
+      if (decodedString) {
         this.sessionId = decodedString;
         this.handleSessionId(this.sessionId);
       }
     },
     async handleSessionId(sessionId) {
       const localResponse = await getRequest(sessionId);
-      if(localResponse.response.request == "onboarding") {
+      if (localResponse.response.request == "onboarding") {
         this.setOnboardingRequest(localResponse.response);
         this.$router.push("/onboarding");
       } else {

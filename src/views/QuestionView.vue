@@ -2,14 +2,22 @@
   <div>
     <!-- MN: TODO: add DEBUG VAR TO SWITCH VIEW AND HAVE DUMMY DATA -->
     <div v-if="stage == 'QUESTION'">
-    <create-question :base="base"></create-question>
+      <create-question :base="base"></create-question>
     </div>
     <div v-if="stage == 'QRCODE'">
       <show-q-r :base="base"></show-q-r>
     </div>
+    <div v-if="stage == 'WAITING'">
+      <wait-for-answer :base="base"></wait-for-answer>
+    </div>
     <div v-if="stage == 'ANSWER'">
       <view-answer :base="base"></view-answer>
     </div>
+
+    <!-- DEBUG COMPONENTS -->
+    <!-- <show-q-r :base=debugBase></show-q-r> -->
+    <!-- <wait-for-answer :base="debugBase"></wait-for-answer> -->
+    <!-- <view-answer :base="debugBase"></view-answer> -->
   </div>
 </template>
 
@@ -17,10 +25,12 @@
 import { mapActions, mapGetters } from "vuex";
 import { createQuestion, getRequest, getSessionStatus } from "../api";
 import { getItem } from "../services/persistent_storage";
-import CreateQuestion from "../components/CreateQuestion";
-import ViewAnswer from "../components/ViewAnswer";
-import ShowQR from "../components/ShowQR";
+import { parseRequest } from "../services/request_parser"; 
 import { setInterval, clearInterval } from 'timers';
+import CreateQuestion from "../components/CreateQuestion";
+import ShowQR from "../components/ShowQR";
+import WaitForAnswer from "../components/WaitForAnswer";
+import ViewAnswer from "../components/ViewAnswer";
 
 
 export default {
@@ -28,6 +38,7 @@ export default {
     return {
       identity: "",
       question: {},
+      request: {},
       description: "",
       selectedQuestion: "name",
       selectedAgeRange: "equalOrGreater",
@@ -36,55 +47,54 @@ export default {
       dobDay: 1,
       dobMonth: 1,
       dobYear: 2000,
-      firstName: "Mark",
+      firstName: "",
       surname: "",
       status: "",
       request_status: "",
       color: "",
       sessionId: "",
       url: "",
-      qType: "",
-      qSubtype: "",
-      qData: "",
       statusInterval: null,
-      stage: "" // QUESTION, QRCODE or ANSWER
+      stage: "" // QUESTION, QRCODE, WAITING or ANSWER
     };
   },
   computed: {
     base() {
       return this;
+    },
+    debugBase() {
+      return {
+        request: {identity: "John Doe", type: 'Name', subType: 'is', data: 'Mark'},
+        sessionId: "xxxxx-xxxxx-xxxxx-xxxxx-xxxxx",
+        request_status: "VALID" // "VALID, INVALID, DENIED"
+      }
     }
   },
   components: {
     CreateQuestion,
+    ShowQR,
     ViewAnswer,
-    ShowQR
+    WaitForAnswer
   },
   methods: {
     create() {
-      if(this.identity == "") {
+      if (this.identity == "") {
         this.identity = "Anonymous";
       }
-
-      this.qType = this.selectedQuestion;
       
-      if(this.selectedQuestion === 'age') {
+      if (this.selectedQuestion === 'age') {
         this.question = {type: this.selectedQuestion, subType: this.selectedAgeRange, data: this.ageInput};
-        this.qSubtype = this.selectedAgeRange;
-        this.qData = this.ageInput;
-      } else if(this.selectedQuestion === 'dateOfBirth') {
+      } else if (this.selectedQuestion === 'dateOfBirth') {
         const date = this.dobYear + "-" + this.dobMonth + "-" + this.dobDay;
         this.question = {type: this.selectedQuestion, data: date};
-        this.qData = date;
-      } else if(this.selectedQuestion === 'name') {
+      } else if (this.selectedQuestion === 'name') {
         // this.question = {type: this.selectedQuestion, data: {firstName: this.firstName, surname: this.surname}};
         this.question = {type: this.selectedQuestion, data: this.firstName};
-        this.qData = this.firstName;
-      } else if(this.selectedQuestion === 'sex') {
+      } else if (this.selectedQuestion === 'sex') {
         this.question = {type: this.selectedQuestion, data: this.selectedSex};
-        this.qData = this.selectedSex;
       }
 
+      this.request = parseRequest(this.identity, this.question);
       this.sendQuestion(this.identity, this.question);
     },
     async sendQuestion(description, question) {
@@ -94,16 +104,17 @@ export default {
       this.stage = "QRCODE"
       this.listenToStatus();
     },
-    // REST CALL LOOP
     listenToStatus() {
       this.statusInterval = setInterval(async () => {
         var response = await getSessionStatus(this.sessionId);
         this.status = response.response;
-        if(this.status == "STARTED") {
-          this.stage = "ANSWER"
+        // console.log(this.status);
+        if (this.status == "STARTED") {
+          this.stage = "WAITING";
         }
-        if(this.status == "FINALIZED") {
+        if (this.status == "FINALIZED") {
           clearInterval(this.statusInterval);
+          this.stage = "ANSWER";
           this.getAnswer();
         }
       }, 1000);
@@ -125,7 +136,6 @@ export default {
       this.status = null;
       this.valid = null;
       this.color = null;
-      this.identity = null;
     }
   },
   created() {

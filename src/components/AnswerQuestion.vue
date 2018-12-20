@@ -1,7 +1,7 @@
 <template>
   <div id="question-content">
-    <h1>{{base.request.description}} asks</h1>
-    <h2><span id="question-attribute">{{base.qType }}</span><span id="question-logic">{{base.qSubtype}}</span> <span id="question-value">{{base.qData}}</span></h2>
+    <h1>{{base.prettyRequest.identity}} asks</h1>
+    <h2><span id="question-attribute">{{base.prettyRequest.type}}</span><span id="question-logic">{{base.prettyRequest.subType}}</span> <span id="question-value">{{base.prettyRequest.data}}</span></h2>
     <h3>Do you want to share this information?</h3>
     <div id="answer-buttons">
       <button class="button-yes" @click="base.acceptQuestion()">Yes</button>
@@ -14,20 +14,6 @@
 export default {
   name: "AnswerQuestion",
   props: ["base"],
-  data() {
-    return {
-        DEBUG: false, // !!!!
-        DEBUG_VARS : {
-          qType : "Age",
-          qSubtype : ">", 
-          qData : "18",
-          request : {
-            description: "Test Requester"
-          },
-        }
-
-    };
-  },
   mounted : function(){
     // setup debug vars if needed ( this is HACKY )
     if (this.DEBUG){
