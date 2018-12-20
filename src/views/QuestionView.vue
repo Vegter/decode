@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- MN: TODO: add DEBUG VAR TO SWITCH VIEW AND HAVE DUMMY DATA -->
     <div v-if="stage == 'QUESTION'">
       <create-question :base="base"></create-question>
     </div>

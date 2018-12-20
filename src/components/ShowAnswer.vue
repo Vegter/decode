@@ -25,17 +25,6 @@
 export default {
   name: "ShowAnswer",
   props: ["base"],
-  mounted : function()
-  {
-    // debug start
-    if (this.DEBUG){
-      // hack value of property
-      this.base = {
-          status : 'FINALIZED',
-          request_status: 'VALID',
-      }
-    }
-  },
 };
 </script>
 

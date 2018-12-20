@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: "ShowAnswer",
+  name: "VerifyAnswer",
   props: ["mymodel"],
   data() {
     return {};

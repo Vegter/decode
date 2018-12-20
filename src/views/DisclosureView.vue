@@ -1,16 +1,15 @@
 <template>
   <div id="disclosure-page">
-      <!-- <div v-if="!continued">
+      <!-- <div v-if="stage == 'ANSWER'">
         <answer-question :base="base"></answer-question>
       </div>
-      <div v-if="continued">
+      <div v-if="stage == 'SHOW'">
         <show-answer :base="base"></show-answer>
       </div> -->
 
       <!-- DEBUG COMPONENTS -->
-      <!-- <answer-question :base="debugBase"></answer-question> -->
-      <show-answer :base="debugBase"></show-answer>
-
+      <answer-question :base="debugBase"></answer-question>
+      <!-- <show-answer :base="debugBase"></show-answer> -->
   </div>
 </template>
 
@@ -29,12 +28,12 @@ export default {
     return {
       request: null,
       prettyRequest: {},
-      continued: false,
       personalData: null,
       portraitImage: null,
       color: null,
       request_status: null,
-      status: null
+      status: null,
+      stage: "ANSWER" // ANSWER & SHOW
     };
   },
   computed: {
@@ -78,7 +77,7 @@ export default {
         // TODO: error message and return to profile
       }
 
-      this.continued = true;
+      this.stage = "SHOW";
       this.request_status = response.data.request_status;
 
       if (response.data.secret) {
@@ -157,10 +156,10 @@ export default {
     }
   },
   created() {
+    this.stage = "ANSWER"
     this.request = this.disclosureRequest;
     const identity = this.request.description;
     const question = JSON.parse(this.request.request)
-    // debugger;
     this.prettyRequest = parseRequest(identity, question);
   }
 };

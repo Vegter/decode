@@ -2,7 +2,7 @@
   <div id="onboarding-page">
     <div id="onboading-content">
       <h1>Building data profile</h1>
-      <h2>Please wait... #</h2>
+      <h2>Please wait...</h2>
       <img src="../assets/verification.svg"/>
     </div>
   </div>

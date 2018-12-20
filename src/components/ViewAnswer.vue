@@ -5,7 +5,7 @@
     <br>
     <br>
     <br>
-    <p>{{base.request.identity}} asks</p>
+    <p>{{base.request.identity}} asks:</p>
     <p>{{base.request.type}} {{base.request.subType}} {{base.request.data}}</p>
     <br>
     <div v-if="base.request_status == 'VALID'" class="answer" :style="{'border-color': base.color}">

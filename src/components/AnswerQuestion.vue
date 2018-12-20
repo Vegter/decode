@@ -1,6 +1,6 @@
 <template>
   <div id="question-content">
-    <h1>{{base.prettyRequest.identity}} asks</h1>
+    <h1>{{base.prettyRequest.identity}} asks:</h1>
     <h2><span id="question-attribute">{{base.prettyRequest.type}}</span><span id="question-logic">{{base.prettyRequest.subType}}</span> <span id="question-value">{{base.prettyRequest.data}}</span></h2>
     <h3>Do you want to share this information?</h3>
     <div id="answer-buttons">
@@ -13,13 +13,7 @@
 <script>
 export default {
   name: "AnswerQuestion",
-  props: ["base"],
-  mounted : function(){
-    // setup debug vars if needed ( this is HACKY )
-    if (this.DEBUG){
-      this.base = this.DEBUG_VARS;
-    }
-  }
+  props: ["base"]
 };
 </script>
 

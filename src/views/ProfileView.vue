@@ -61,12 +61,14 @@ export default {
         this.gotData = true;
         this.personalData = JSON.parse(this.personalData);
         this.setDataStrings(this.personalData, this.portraitImage)
+      } else {
+        this.$router.push("/");
       }
     }
   },
-  mounted() {
-    this.checkForData();
-  },
+  // mounted() {
+  //   this.checkForData();
+  // },
   created() {
     this.checkForData();
   }

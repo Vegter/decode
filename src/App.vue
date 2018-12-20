@@ -4,7 +4,7 @@
     <div id="navbar">
         <div v-if="navPopup" id="popup">
           <div id="navbar-header">
-            <a v-if="navPopupBackButton" href="#" class="back-button"><img src="./assets/arrow_back.svg"></a>
+            <a v-if="navPopupBackButton" href="#" class="back-button" @click="backButtonClick"><img src="./assets/arrow_back.svg"></a>
             <h1>{{ pageTitle }}</h1>
           </div>
         </div>
@@ -32,9 +32,9 @@ export default {
         profile : { pageTitle: "Personal Identity", navPopup : false, section : "profile" },
         question : { pageTitle: "Question Generator", navPopup : false, section : "claim" },
         findthebox : { pageTitle: "Welcome", navPopup : true, navPopupBackButton: false },
-        onboarding : { pageTitle: "Welcome", navPopup : true, navPopupBackButton: false },
+        onboarding : { pageTitle: "Onboarding", navPopup : true, navPopupBackButton: false },
         scan : { pageTitle: "Scan QR Code", navPopup : true, navPopupBackButton: false },
-        disclosure : { pageTitle: "Disclosure", navPopup : true, navPopupBackButton: true },
+        disclosure : { pageTitle: "Disclosure", navPopup : true, navPopupBackButton: true, backButtonLocation: "profile" },
         // ALL OTHER ROUTES TODO
       },
       pageTitle: "Personal Identity",
@@ -80,6 +80,10 @@ export default {
       this.$router.push({ path: "question", query: { } });
     },
 
+    backButtonClick : function(e)
+    {
+      this.$route.go(-1);
+    }
   },
   
   watch: {
