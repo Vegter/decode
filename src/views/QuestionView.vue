@@ -15,7 +15,7 @@
 
     <!-- DEBUG COMPONENTS -->
     <!-- <show-q-r :base=debugBase></show-q-r> -->
-    <!-- <wait-for-answer :base="debugBase"></wait-for-answer> -->
+    <!--<wait-for-answer :base="debugBase"></wait-for-answer>-->
     <!-- <view-answer :base="debugBase"></view-answer> -->
   </div>
 </template>

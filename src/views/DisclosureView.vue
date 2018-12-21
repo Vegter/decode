@@ -1,14 +1,14 @@
 <template>
   <div id="disclosure-page">
-      <!-- <div v-if="stage == 'ANSWER'">
+      <div v-if="stage == 'ANSWER'">
         <answer-question :base="base"></answer-question>
       </div>
       <div v-if="stage == 'SHOW'">
         <show-answer :base="base"></show-answer>
-      </div> -->
+      </div>
 
       <!-- DEBUG COMPONENTS -->
-      <answer-question :base="debugBase"></answer-question>
+      <!--<answer-question :base="debugBase"></answer-question>-->
       <!-- <show-answer :base="debugBase"></show-answer> -->
   </div>
 </template>

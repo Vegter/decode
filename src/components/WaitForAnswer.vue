@@ -1,17 +1,12 @@
 <template>
-  <div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <h1 class="title">Aan het wachten op antwoord...</h1>
-    <br>
+  <div id="wait-for-answer-page">
+    <h1>Waiting for answer...</h1>
+    
     <p>{{base.request.identity}} asks</p>
     <p>{{base.request.type}} {{base.request.subType}} {{base.request.data}}</p>
-    <br>
-    <br>
-    <div>
-      <button class="button is-link" @click="base.cancel()">Annuleren</button>
+    
+    <div id="wait-for-answer-footer">
+      <a class="wait-for-answer-cancel-button" @click="base.cancel()">Cancel</a>
     </div>
   </div>
 </template>
@@ -23,21 +18,44 @@ export default {
 };
 </script>
 
-<style>
-.picture {
-  border-style: solid;
-  border-width: thick;
-  border-radius: 5px;
+<style scoped>
+
+#wait-for-answer-page {
+  display: block;
+  margin: 0;
+  padding: 0;
+  padding-top: 20vh;
+  border: 1px solid transparent;
+  height: 100vh;
+  position: relative;
+  text-align: center;
 }
-.answer {
-  border-style: solid;
-  border-width: 20px;
-  border-radius: 10px;
+
+h1 { 
+  font-size: 1.2em;
+  font-weight: bold;
 }
-.isOK {
-  color: green;
+
+#wait-for-answer-footer {
+  display: block;
+  position: absolute;
+  height: 80px;
+  bottom: 0;
+  width: 100%;
 }
-.isNotOK {
-  color: red;
+
+a.wait-for-answer-cancel-button {
+  display: block;
+  background: #c60039;
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+  border-radius: 6vh;
+  height: 7vh;
+  color: white;
+  text-align: center;
+  padding-top: 1.5vh;
 }
+
 </style>
