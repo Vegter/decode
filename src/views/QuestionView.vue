@@ -93,6 +93,10 @@ export default {
         this.question = {type: this.selectedQuestion, data: this.selectedSex};
       }
 
+      if (this.question.data == "") {
+        return;
+      }
+
       this.request = parseRequest(this.identity, this.question);
       this.sendQuestion(this.identity, this.question);
     },

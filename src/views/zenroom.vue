@@ -28,6 +28,7 @@ import _pbkdf_encrypt from "raw-loader!../zenroom/pbkdf_encrypt.lua";
 import _pbkdf_encrypt_keys from "raw-loader!../zenroom/pbkdf_encrypt.keys";
 import _pbkdf_decrypt from "raw-loader!../zenroom/pbkdf_decrypt.lua";
 import _pbkdf_decrypt_keys from "raw-loader!../zenroom/pbkdf_decrypt.keys";
+import { setItem } from "../services/persistent_storage";
 
 export default {
   name: "zenroom",

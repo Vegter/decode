@@ -4,7 +4,7 @@
       <div id="create-question-card">
         <img src="../assets/question_generator.svg"/>
         <div class="section">
-          <h1>Define your Identity:</h1>
+          <h1>Define your identity</h1>
           <input class="input" type="text" placeholder="Your identity" v-model="base.identity">
         </div>
         <div class="section">
@@ -16,15 +16,15 @@
             <!-- <option value="nationality">Nationaliteit</option> -->
             <option value="sex">Sex</option>
           </select>
-          <h1>Choose a logic</h1>
           <!-- Age -->
           <div v-if="base.selectedQuestion == 'age'">
+            <h1>Choose a logic</h1>
             <select v-model="base.selectedAgeRange">
               <option value="equalOrGreater">Equal or greater then</option>
               <option value="lesser">Lower then</option>
               <option value="equal">Equal to</option>
             </select>
-            <h1>The age:</h1>
+            <!-- <h1>The age:</h1> -->
             <input class="input" type="number" placeholder="Age" v-model="base.ageInput">
           </div>
           <!-- Date of birth -->
@@ -38,7 +38,7 @@
             <input
               class="input"
               type="text"
-              placeholder="Voornaam"
+              placeholder="First name"
               v-model="base.firstName"
             >
             <!-- <input

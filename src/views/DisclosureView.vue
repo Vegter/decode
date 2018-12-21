@@ -24,6 +24,7 @@ import EnterPin from "../components/EnterPin";
 import debugImage from "../assets/portrait_image";
 
 export default {
+  name: "disclosureView",
   data() {
     return {
       request: null,
@@ -114,7 +115,15 @@ export default {
       } else if (request.type === "name") {
         const name = this.personalData.name;
         const firstName = name[1];
-        if (request.data === firstName) {
+
+        // if first name exists of multiple names, extract the first one
+        var veryFirstName = "";
+        if (firstName.indexOf(" ") != -1) {
+          const names = firstName.split(" ");
+          veryFirstName = names[0];
+        }
+
+        if (request.data === firstName || request.data === veryFirstName) {
           return true;
         }
       } else if (request.type === "sex") {
@@ -146,8 +155,8 @@ export default {
         }
         return age;
     },
+
     return() {
-      this.request = null;
       this.continued = false;
       this.personalData = null;
       this.portraitImage = null;
@@ -161,6 +170,9 @@ export default {
     const identity = this.request.description;
     const question = JSON.parse(this.request.request)
     this.prettyRequest = parseRequest(identity, question);
+  },
+  destroyed() {
+    this.denyQuestion();
   }
 };
 </script>

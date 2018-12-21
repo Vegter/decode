@@ -33,8 +33,8 @@ export default {
         question : { pageTitle: "Question Generator", navPopup : false, section : "claim" },
         findthebox : { pageTitle: "Welcome", navPopup : true, navPopupBackButton: false },
         onboarding : { pageTitle: "Onboarding", navPopup : true, navPopupBackButton: false },
-        scan : { pageTitle: "Scan QR Code", navPopup : true, navPopupBackButton: false },
-        disclosure : { pageTitle: "Disclosure", navPopup : true, navPopupBackButton: true, backButtonLocation: "profile" },
+        scan : { pageTitle: "Scan QR Code", navPopup : true, navPopupBackButton: true , backButtonLocation: 'profile' },
+        disclosure : { pageTitle: "Disclosure", navPopup : true, navPopupBackButton: true , backButtonLocation: 'profile'},
         // ALL OTHER ROUTES TODO
       },
       pageTitle: "Personal Identity",
@@ -60,7 +60,8 @@ export default {
 
       if (curNavConfig){
         if (this.NAVBAR_CONFIG[ this.$route.name ].section == "claim"){
-          return true;}
+          return true;
+        }
       }
       return false
     },    
@@ -82,13 +83,18 @@ export default {
 
     backButtonClick : function(e)
     {
-      this.$route.go(-1);
+      let curNavConfig = this.NAVBAR_CONFIG[this.$route.name];
+
+      if (curNavConfig) {
+        let location = this.NAVBAR_CONFIG[this.$route.name].backButtonLocation;
+        this.$router.push("/" + location);
+      }
     }
   },
   
   watch: {
     $route() {
-      console.log(this.$route);
+      // console.log(this.$route);
       // make sure the navbar is in the right state
       let curNavBarConfig = this.NAVBAR_CONFIG[ this.$route.name ];
 
@@ -104,11 +110,11 @@ export default {
   },
 
   mounted() {
-    const sessionId = this.$route.query.session;
-    if (sessionId) {
-      // this.$router.push('/readQR');
-      this.$router.push({ path: "readQR", query: { session: sessionId } });
-    }
+    // const sessionId = this.$route.query.session;
+    // if (sessionId) {
+    //   // this.$router.push('/readQR');
+    //   this.$router.push({ path: "readQR", query: { session: sessionId } });
+    // }
   }
 };
 </script>
