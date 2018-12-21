@@ -8,7 +8,7 @@
       </div>
 
       <!-- DEBUG COMPONENTS -->
-      <!--<answer-question :base="debugBase"></answer-question>-->
+      <!-- <answer-question :base="debugBase"></answer-question> -->
       <!-- <show-answer :base="debugBase"></show-answer> -->
   </div>
 </template>

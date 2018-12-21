@@ -80,7 +80,7 @@ p {
   margin-left: auto;
   margin-right: auto;
   border-radius: 100px;
-  background: red;
+  background: green;
   border: 8px solid black;
 }
 
