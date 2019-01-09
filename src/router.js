@@ -44,11 +44,11 @@ export default new Router({
       component: () =>
         import(/* webpackChunkName: "box" */ "./views/FindTheBoxView.vue")
     },
-    // {
-    //   path: "/zenroom",
-    //   name: "zenroom",
-    //   component: () =>
-    //     import(/* webpackChunkName: "zenroom" */ "./views/zenroom.vue")
-    // }    
+    {
+      path: "/zenroom",
+      name: "zenroom",
+      component: () =>
+        import(/* webpackChunkName: "zenroom" */ "./views/zenroom.vue")
+    }    
   ]
 });
