@@ -74,13 +74,13 @@ export async function getRequest(sessionId) {
   return response.json();
 }
 
-export async function acceptRequest(sessionId, username) {
+export async function acceptRequest(sessionId, data) {
   const url = DECODE_SERVER + "accept_request";
   const response = await fetch(url, {
     method: "POST",
     body: JSON.stringify({
       session_id: sessionId,
-      username: username
+      request_response: data
     })
   });
   return response.json();
@@ -92,6 +92,18 @@ export async function denyRequest(sessionId) {
     method: "POST",
     body: JSON.stringify({
       session_id: sessionId
+    })
+  });
+  return response.json();
+}
+
+export async function createQuestion(description, question) {
+  const url = DECODE_SERVER + "init_disclosure";
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      description: description,
+      attribute_request: question
     })
   });
   return response.json();

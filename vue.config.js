@@ -5,7 +5,8 @@ module.exports = {
     disableHostCheck: true,
     host: "0.0.0.0",
     headers: {
-      "Access-Control-Allow-Origin": "http://0.0.0.0:8080/",
+      // "Access-Control-Allow-Origin": "http://0.0.0.0:8080/",
+      "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Max-Age": "3600",
       "Access-Control-Allow-Headers":

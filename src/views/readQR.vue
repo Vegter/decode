@@ -1,129 +1,41 @@
 <template>
-    <div>
-        <section class="section" v-if="!loggedIn">
-            <div class="container">
-                <h1 class="title">Login</h1>
-                <div>
-                    <div class="field">
-                        <label class="label">Naam</label>
-                        <div class="control">
-                            <input class="input" type="text" placeholder="Je naam"
-                                   v-model="inputUsername">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Pincode</label>
-                        <div class="control">
-                            <input class="input" type="password" maxlength="4" placeholder="Pincode" pattern="[0-9]{4}"
-                                   v-model="pincode">
-                        </div>
-                    </div>
-                    <p>
-                        <button class="button is-link" @click="login()" :disabled="!(inputUsername && pincode.length === 4)">Log in</button>
-                    </p>
-                </div>
-            </div>
-        </section>
+  <div>
+    <section class="section" v-if="!loggedIn">
+      <div class="container">
+        <login :mymodel="mymodel"></login>
+      </div>
+    </section>
 
-        <section class="section" v-else-if="onboardingRequest">
-            <div class="container">
-                <!-- <div>
-                    <h1 class="title">Join onboarding?</h1>
-                    <button class="button is-link" @click="joinOnboarding()">YES!</button>
-                </div>
-                <br/>
-                <div v-if="result">
-                    <h2 class="subtitle">Public key attached to session</h2>
-                </div>
-                <br/> -->
-                <div>
-                    <div v-if="data">
-                      <pre>{{data[0]}}</pre>
-                      <img v-bind:src="'data:image/jpeg;base64,'+image" />
-                    </div>
-                </div>
-            </div>
-        </section>
+    <section class="section" v-else-if="onboardingRequest">
+      <div class="container">
+        <onboarding-request :mymodel="mymodel"></onboarding-request>
+      </div>
+    </section>
 
-        <section class="section" v-else-if="request">
-            <div class="container">
-                <div v-if="!response">
-                    <h1 class="title">Beantwoord vraag</h1>
-
-                    <h2 class="subtitle">
-                        {{request.description}}
-                    </h2>
-                    <div>
-                        <button class="button is-link" @click="acceptQuestion()">OK</button>
-                        &nbsp;
-                        <button class="button is-danger" @click="denyQuestion()">Weiger</button>
-                    </div>
-                    <h2 class="subtitle">
-                        {{sessionId}}
-                    </h2>
-                </div>
-
-                <div v-else-if="response.response.data" class="has-text-centered">
-                    <answer :question="request.description"
-                            :status="response.response.data.request_status"
-                            :valid="response.response.data.request_valid"
-                            :color="response.response.data.secret"
-                            :pictureUrl="pictureUrl">
-                    </answer>
-                    <br>
-                    <p>
-                        <button class="button" @click="endQuestion()">OK</button>
-                    </p>
-
-                </div>
-
-                </div>
-        </section>
-
-        <section class="section" v-else>
-            <div class="container">
-                <h1 class="title">Scan QR Code</h1>
-                <div>
-                    <h2 class="subtitle">
-                        Scan de QR code om de identiteitsvraag te lezen
-                    </h2>
-
-                    <!-- <div class="card">
-                        <div class="card-content">
-                        <div class="content">
-                            Tijdelijk kan QR code alleen worden gescant met je eigen camera functie of overige QR code scanner.
-                        </div>
-                        <div class="content">
-                            Groetjes, <br/> De developers
-                        </div>
-
-                        </div>
-                    </div> -->
-
-                    <div>
-                        <qrcode-reader @decode="onDecode"></qrcode-reader>
-                        <!-- <br/> -->
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Session ID manual input</label>
-                    <div class="control">
-                        <input class="input" type="text" placeholder="Session code"
-                               v-model="inputSession" @change="onInputSession">
-                    </div>
-                    <p>
-                        <button class="button is-link" @click="getRequest(sessionId)" :disabled="!inputSession">Get Request</button>
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <div v-if="debug">
-            <pre>{{sessionId}}</pre>
-            <pre>{{request}}</pre>
-            <pre>{{response}}</pre>
+    <section class="section" v-else-if="disclosureRequest">
+      <div class="container">
+        <div v-if="!response">
+          <answer-question :mymodel="mymodel"></answer-question>
         </div>
+
+        <div v-else-if="response.response.data" class="has-text-centered">
+          <show-answer :mymodel="mymodel"></show-answer>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" v-else>
+      <div class="container">
+        <scan-i-d-question :mymodel="mymodel"></scan-i-d-question>
+      </div>
+    </section>
+
+    <div v-if="debug">
+      <pre>{{sessionId}}</pre>
+      <pre>{{request}}</pre>
+      <pre>{{response}}</pre>
     </div>
+  </div>
 </template>
 
 <script>
@@ -135,13 +47,18 @@ import {
   getRequest,
   acceptRequest,
   denyRequest,
-  getPictureUrl,
+  // getPictureUrl,
   attachPublicKey
 } from "../api";
-import Answer from "../components/Answer";
+// import Answer from "../components/Answer";
 // Zenroom
 import _keygen from "raw-loader!../zenroom/keygen.lua";
 import _decrypt from "raw-loader!../zenroom/decrypt_message.lua";
+import Login from "../components/Login";
+import OnboardingRequest from "../components/OnboardingRequest";
+import AnswerQuestion from "../components/AnswerQuestion";
+import ViewAnswer from "../components/ViewAnswer";
+import ScanIDQuestion from "../components/ScanIDQuestion";
 
 export default {
   data() {
@@ -149,6 +66,7 @@ export default {
       sessionId: null,
       request: null,
       onboardingRequest: null,
+      disclosureRequest: null,
       response: null,
       inputSession: "",
       inputUsername: "aj.jansen",
@@ -165,11 +83,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["username", "debug"])
+    ...mapGetters(["username", "debug"]),
+    mymodel() {
+      return this;
+    }
   },
   components: {
-    QrcodeReader,
-    answer: Answer
+    ScanIDQuestion,
+    ViewAnswer,
+    AnswerQuestion,
+    OnboardingRequest,
+    Login,
+    QrcodeReader
+    // answer: Answer
   },
   methods: {
     ...mapActions({
@@ -236,11 +162,14 @@ export default {
         decrypt();
       }
     },
-    joinOnboarding() {
-      this.zenroom("keypair");
-      this.result = this.keypair;
-      // this.keypair = JSON.parse(this.keypair);
-      this.sendPublicKey(JSON.parse(this.keypair).public);
+    joinOnboarding(answer) {
+      if (answer === "yes") {
+        this.zenroom("keypair");
+        this.result = this.keypair;
+        this.sendPublicKey(JSON.parse(this.keypair).public);
+      } else {
+        // TODO: send end onboarding request
+      }
     },
     async sendPublicKey(publicKey) {
       this.response = await attachPublicKey(publicKey, this.sessionId);
@@ -262,20 +191,22 @@ export default {
     },
     async getRequest(sessionId) {
       this.request = await getRequest(sessionId);
-      // console.log(this.request, typeof this.request);
       if (this.request.response.request === "onboarding") {
         this.onboardingRequest = this.request.response;
         joinRoom(this.sessionId);
         this.joinOnboarding();
       } else {
-        this.request = this.request.response;
+        this.disclosureRequest = this.request.response;
       }
     },
     async acceptQuestion() {
-      this.response = await acceptRequest(this.request.id, this.username);
+      this.response = await acceptRequest(
+        this.disclosureRequest.id,
+        this.username
+      );
     },
     async denyQuestion() {
-      this.response = await denyRequest(this.request.id);
+      this.response = await denyRequest(this.disclosureRequest.id);
     },
     endQuestion() {
       this.$router.push("/");
