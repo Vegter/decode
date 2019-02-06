@@ -15,7 +15,7 @@ import { getRequest } from "../api";
 export default {
   data() {
     return {
-      sessionId: null
+      sessionId: null,
     };
   },
   computed: {
@@ -38,7 +38,9 @@ export default {
     onDecode(decodedString) {
       
       if (decodedString) {
-        this.sessionId = decodedString;
+        // this.sessionId = decodedString;
+        const url = decodedString;
+        this.sessionId = url.substring(url.lastIndexOf('/')+1, url.length);
         this.handleSessionId(this.sessionId);
       }
     },
