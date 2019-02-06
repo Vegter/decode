@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
 
 Vue.use(Router);
 
@@ -29,6 +28,12 @@ export default new Router({
     {
       path: "/disclosure",
       name: "disclosure",
+      component: () =>
+        import(/* webpackChunkName: "disclosure" */ "./views/DisclosureView.vue")
+    },
+    {
+      path: "/disclosure/:id",
+      name: "disclosure with id",
       component: () =>
         import(/* webpackChunkName: "disclosure" */ "./views/DisclosureView.vue")
     },
