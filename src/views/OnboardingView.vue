@@ -140,7 +140,14 @@ export default {
   },
   mounted() {
   },
-  created() {
+  async created() {
+    const routeParams = this.$route.params;
+    if (routeParams.id) {
+      console.log("param id:", routeParams);
+      const localResponse = await getRequest(routeParams.id);
+      this.setDisclosureRequest(localResponse.response);
+    }
+
     if (this.onboardingRequest) {
       this.request = this.onboardingRequest;
       this.startOnboarding();
