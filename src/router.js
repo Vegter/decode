@@ -26,20 +26,8 @@ export default new Router({
         import(/* webpackChunkName: "onboarding" */ "./views/OnboardingView.vue")
     },
     {
-      path: "/onboarding/:id",
-      name: "onboarding with id",
-      component: () =>
-        import(/* webpackChunkName: "onboarding" */ "./views/OnboardingView.vue")
-    },
-    {
       path: "/disclosure",
       name: "disclosure",
-      component: () =>
-        import(/* webpackChunkName: "disclosure" */ "./views/DisclosureView.vue")
-    },
-    {
-      path: "/disclosure/:id",
-      name: "disclosure with id",
       component: () =>
         import(/* webpackChunkName: "disclosure" */ "./views/DisclosureView.vue")
     },

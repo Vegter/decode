@@ -1,16 +1,16 @@
 <template>
     <div>
-        <div v-if="stage == 'QUESTION'">
-            <create-question :base="base"></create-question>
+        <div v-if="stage === 'QUESTION'">
+            <create-question :base="base"/>
         </div>
-        <div v-if="stage == 'QRCODE'">
-            <show-q-r :base="base"></show-q-r>
+        <div v-if="stage === 'QRCODE'">
+            <show-q-r :base="base"/>
         </div>
-        <div v-if="stage == 'WAITING'">
-            <wait-for-answer :base="base"></wait-for-answer>
+        <div v-if="stage === 'WAITING'">
+            <wait-for-answer :base="base"/>
         </div>
-        <div v-if="stage == 'ANSWER'">
-            <view-answer :base="base"></view-answer>
+        <div v-if="stage === 'ANSWER'">
+            <view-answer :base="base"/>
         </div>
 
         <!-- DEBUG COMPONENTS -->
@@ -77,7 +77,7 @@
     },
     methods: {
       create() {
-        if (this.identity == "") {
+        if (this.identity === "") {
           this.identity = "Anonymous";
         }
 
@@ -93,7 +93,7 @@
           this.question = {type: this.selectedQuestion, data: this.selectedSex};
         }
 
-        if (this.question.data == "") {
+        if (this.question.data === "") {
           return;
         }
 
@@ -104,7 +104,7 @@
         const response = await createQuestion(description, JSON.stringify(question));
         this.sessionId = response.session_id;
 
-        this.url = process.env.VUE_APP_BASE + "disclosure/" + this.sessionId;
+        this.url = process.env.VUE_APP_BASE + "disclosure?id=" + this.sessionId;
         console.log("url:", this.url);
 
         this.stage = "QRCODE";
@@ -115,10 +115,10 @@
           var response = await getSessionStatus(this.sessionId);
           this.status = response.response;
           // console.log(this.status);
-          if (this.status == "STARTED") {
+          if (this.status === "STARTED") {
             this.stage = "WAITING";
           }
-          if (this.status == "FINALIZED") {
+          if (this.status === "FINALIZED") {
             clearInterval(this.statusInterval);
             this.stage = "ANSWER";
             this.getAnswer();
@@ -135,7 +135,7 @@
       },
       cancel() {
         clearInterval(this.statusInterval);
-        this.stage = "QUESTION"
+        this.stage = "QUESTION";
         this.sessionId = null;
         this.question = null;
         this.description = null;

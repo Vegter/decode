@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { getRequest, attachPublicKey, getSessionStatus } from "../api";
 import { setItem } from "../services/persistent_storage";
 import sha512 from "js-sha512";
@@ -41,6 +41,9 @@ export default {
     CreatePin
   },
   methods: {
+    ...mapActions({
+      setOnboardingRequest: "setOnboardingRequest",
+    }),
     firstPin(/*code*/) {
       // this.startOnboarding();
 
@@ -51,7 +54,7 @@ export default {
     secondPin(code) {
       const secondHash = sha512.update(code);
       console.log(secondHash.hex());
-      if (this.firstHash != secondHash) {
+      if (this.firstHash !== secondHash) {
         this.firstHash = null;
         console.log("Retry");
         // TODO: give notification to retry
@@ -83,10 +86,10 @@ export default {
     },
     listenToStatus() {
       this.statusInterval = setInterval(async () => {
-        var response = await getSessionStatus(this.request.id);
+        const response = await getSessionStatus(this.request.id);
         this.status = response.response;
-        console.log(this.status)
-        if (this.status == "GOT_ENCR_DATA") {
+        console.log(this.status);
+        if (this.status === "GOT_ENCR_DATA") {
           this.handleEncrypedData();
           clearInterval(this.statusInterval);
         }
@@ -138,14 +141,13 @@ export default {
       }
     }
   },
-  mounted() {
-  },
-  async created() {
-    const routeParams = this.$route.params;
-    if (routeParams.id) {
-      console.log("param id:", routeParams);
-      const localResponse = await getRequest(routeParams.id);
-      this.setDisclosureRequest(localResponse.response);
+  async mounted() {
+    const routeQuery = this.$route.query;
+
+    if (routeQuery.id) {
+      console.log("query:", routeQuery);
+      const localResponse = await getRequest(routeQuery.id);
+      this.setOnboardingRequest(localResponse.response);
     }
 
     if (this.onboardingRequest) {

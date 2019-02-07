@@ -164,10 +164,10 @@
       }
     },
     async created() {
-      const routeParams = this.$route.params;
-      if (routeParams.id) {
-        console.log("param id:", routeParams);
-        const localResponse = await getRequest(routeParams.id);
+      const routeQuery = this.$route.query;
+      if (routeQuery.id) {
+        console.log("param id:", routeQuery);
+        const localResponse = await getRequest(routeQuery.id);
         this.setDisclosureRequest(localResponse.response);
       }
 
