@@ -10,14 +10,14 @@ This project was created as a proof of concept prototype. There for it was never
   
 The Decode Amsterdam project excites of two other parts which are needed to take full potential of this app:
 
-Passport Scanner Repo Link
+[Passport Scanner](#) (Reading a Dutch passport and transferring its data to this PWA)
 
-Session Manager Repo Link
+[Session Manager](#) (Managing sessions for onboarding and disclosure)
 
 
 ## Project setup
 
-In order the run this project locally and request an attribute disclosure or initialize a digital identity you first need to run a Session Manager. The location to this Session Manager can be set up using the `VUE_APP_API` variable in the `.env.development` file.
+In order the run this project locally and request an attribute disclosure or initialize a digital identity you first need to run a [Session Manager](#). The location to this Session Manager can be set up using the `VUE_APP_API` variable in the `.env.development` file.
 
 When this is setup you can further setup the project:
 
@@ -25,13 +25,13 @@ When this is setup you can further setup the project:
 npm install
 ```
 
-#### Run locally
+Run the project locally:
 
 ```
 npm run serve
 ```
 
-#### Build for production
+Build for production:
 ```
 npm run build
 ```
