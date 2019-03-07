@@ -61,12 +61,10 @@ export default {
       }
       console.log("Accepted");
     },
-    async startOnboarding() {
+    startOnboarding() {
       this.zenroom("keypair");
       const publicKey = JSON.parse(this.keypair).public;
-      await attachPublicKey(publicKey, this.request.id);
-
-      this.listenToStatus();
+      attachPublicKey(publicKey, this.request.id).then(() => this.listenToStatus());
     },
     async handleEncrypedData() {
       this.session = await getRequest(this.request.id);
@@ -96,10 +94,15 @@ export default {
       }, 1000);
     },
     zenroom(method) {
+      window.Module['onRuntimeInitialized'] = function() {
+        console.log("onRuntimeInitialized!");
+      };
+
       window.Module = {
         ...window.Module,
         exec_ok: () => (this.result += " OK"),
-        exec_error: () => (this.result += " ERROR")
+        exec_error: () => (this.result += " ERROR"),
+        onRuntimeInitialized: () => (console.log("onRuntimeInitialized call"))
       };
 
       const keypair = () => {
@@ -111,10 +114,10 @@ export default {
         const script = _keygen;
 
         window.Module.ccall(
-          "zenroom_exec",
-          "number",
-          ["string", "string", "string", "string", "number"],
-          [script, conf, keys, data, 1]
+            "zenroom_exec",
+            "number",
+            ["string", "string", "string", "string", "number"],
+            [script, conf, keys, data, 1]
         );
       };
 
@@ -141,16 +144,22 @@ export default {
       }
     }
   },
-  async mounted() {
+  mounted() {
     const routeQuery = this.$route.query;
 
     if (routeQuery.id) {
       console.log("query:", routeQuery);
-      const localResponse = await getRequest(routeQuery.id);
-      this.setOnboardingRequest(localResponse.response);
-    }
+      // const localResponse = await getRequest(routeQuery.id);
+      // this.setOnboardingRequest(localResponse.response);
+      // this.$router.push('/onboarding');
 
-    if (this.onboardingRequest) {
+      getRequest(routeQuery.id)
+        .then(r => {
+          this.request = r.response;
+          this.startOnboarding();
+        });
+    }
+    else if (this.onboardingRequest) {
       this.request = this.onboardingRequest;
       this.startOnboarding();
     }
