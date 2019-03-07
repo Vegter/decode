@@ -6,13 +6,12 @@ In this repository you'll find the source code to the PWA (Progressive Web App) 
 First of all it is used as a wallet to store personal information. Secondly a request to disclose this personal information can be generated.
 
 **Important note:**
-This project was created as a proof of concept prototype. There for it was never meant to be used on a large scale but purely for demonstration purposes only.
+This project was created as a proof of concept prototype. There for it was never meant to be used on a large scale but for demonstration purposes only.
   
 The Decode Amsterdam project excites of two other parts which are needed to take full potential of this app:
 
-[Passport Scanner](#) (Reading a Dutch passport and transferring its data to this PWA)
-
-[Session Manager](#) (Managing sessions for onboarding and disclosure)
+* [Passport Scanner](#) (Reading a Dutch passport and transferring its data to this PWA)
+* [Session Manager](#) (Managing sessions for onboarding and disclosure)
 
 
 ## Project setup
