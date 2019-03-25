@@ -1,4 +1,4 @@
-# Decode Amsterdam
+# Decode Amsterdam PWA
 
 The Decode Amsterdam project provides a prototype to kick start a (primitive) Digital Identity.
 
